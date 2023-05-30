@@ -63,3 +63,9 @@ export function createRandomContracts(size = 100) {
   }
   return randomContracts
 }
+
+export type Migrations = {
+  id: number
+  name: string
+  timestamp: string
+}

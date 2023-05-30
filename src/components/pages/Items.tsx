@@ -1,9 +1,51 @@
 import { useEffect, useState } from 'react'
-import { Item, Model } from '../../../types'
+import { Model } from '../../../types'
 import TableModel from '../table/TableModel'
+import TableFilter from '../table/TableFilter'
+import TableData from '../table/TableData'
+import TableSkeleton from '../table/TableSkeleton'
+import TableAdvancedFilter from '../table/TableAdvancedFilter'
+import TableColumnFilter from '../table/TableColumnFilter'
 
-const ItemsModel: Model<Item> = {
-  columns: ['id', 'name', 'uf', 'institution', 'items', 'category', 'price', 'signed', 'due'],
+const ItemsModel: Model = {
+  columns: [
+    {
+      id: 'id',
+      label: 'Id',
+    },
+    {
+      id: 'name',
+      label: 'Nome',
+    },
+    {
+      id: 'uf',
+      label: 'UF',
+    },
+    {
+      id: 'institution',
+      label: 'Instituição',
+    },
+    {
+      id: 'items',
+      label: 'Itens',
+    },
+    {
+      id: 'category',
+      label: 'Categoria',
+    },
+    {
+      id: 'price',
+      label: 'Preço',
+    },
+    {
+      id: 'signed',
+      label: 'Assinado',
+    },
+    {
+      id: 'due',
+      label: 'Vencimento',
+    },
+  ],
   data: [],
   viewData: [],
 }
@@ -16,22 +58,23 @@ export default function Items() {
     fetch('http://localhost:3000/api/items')
       .then((response) => response.json())
       .then(({ items }) => {
-        setItemsModel({ ...itemsModel, data: items, viewData: items })
+        setItemsModel({
+          data: items,
+          columns: itemsModel.columns,
+          viewData: items,
+        })
       })
       .finally(() => setLoading(false))
   }, [])
 
   return (
     <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
-      {/* TODO: Skeleton loader.. */}
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        <TableModel
-          model={itemsModel}
-          setModel={setItemsModel}
-        />
-      )}
+      <TableModel
+        model={itemsModel}
+        setModel={setItemsModel}>
+        <TableFilter />
+        {loading ? <TableSkeleton /> : <TableData />}
+      </TableModel>
     </div>
   )
 }

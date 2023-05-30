@@ -1,7 +1,13 @@
-export type Model<T> = {
-  columns: (keyof T)[]
-  data: T[]
-  viewData: T[]
+export type Column = {
+  id: string
+  label: string
+  isVisible?: boolean = true
+}
+
+export type Model = {
+  columns: Column[]
+  data: unknown[]
+  viewData: unknown[]
 }
 
 export type Order = {

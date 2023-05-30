@@ -23,6 +23,7 @@ const OrdersModel: Model<Order> = {
     'deliveryDate',
     'price',
   ],
+  viewColumns: [],
   data: [],
   viewData: [],
 }
@@ -35,22 +36,23 @@ export default function Orders() {
     fetch('http://localhost:3000/api/orders')
       .then((response) => response.json())
       .then(({ orders }) => {
-        setOrdersModel({ ...ordersModel, data: orders, viewData: orders })
+        setOrdersModel({
+          data: orders,
+          columns: ordersModel.columns,
+          viewData: orders,
+          viewColumns: ordersModel.columns,
+        })
       })
       .finally(() => setLoading(false))
   }, [])
 
   return (
     <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
-      {/* TODO: Skeleton loader.. */}
-      {loading ? (
-        <p>Carregando...</p>
-      ) : (
-        <TableModel
-          model={ordersModel}
-          setModel={setOrdersModel}
-        />
-      )}
+      <TableModel
+        loading={loading}
+        model={ordersModel}
+        setModel={setOrdersModel}
+      />
     </div>
   )
 }

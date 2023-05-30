@@ -1,20 +1,15 @@
-import { Dispatch, SetStateAction } from 'react'
-import TableData from './TableData'
-import TableFilter from './TableFilter'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 import { Model } from '../../../types'
+import { TableContext } from './TableContext'
 
-type TableModelProps<T> = {
-  model: Model<T>
-  setModel: Dispatch<SetStateAction<Model<T>>>
-}
-export default function TableModel<T>({ model, setModel }: TableModelProps<T>) {
-  return (
-    <>
-      <TableFilter
-        model={model}
-        setModel={setModel}
-      />
-      <TableData model={model} />
-    </>
-  )
+export default function TableModel({
+  model,
+  setModel,
+  children,
+}: {
+  model: Model
+  setModel: Dispatch<SetStateAction<Model>>
+  children: ReactNode
+}) {
+  return <TableContext.Provider value={{ model, setModel }}>{children}</TableContext.Provider>
 }

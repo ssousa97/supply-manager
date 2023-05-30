@@ -3,6 +3,7 @@ import itemsRouter from './routers/items'
 import ordersRouter from './routers/orders'
 import contractsRouter from './routers/contracts'
 import dotenv from 'dotenv'
+import { setupMigrations } from './database/database'
 
 dotenv.config()
 
@@ -13,6 +14,8 @@ app.get('/', (req: Request, res: Response) => {
     message: 'Hello World 2!',
   })
 })
+
+await setupMigrations()
 
 app.use('/api/items', itemsRouter)
 app.use('/api/orders', ordersRouter)
