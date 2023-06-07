@@ -1,10 +1,58 @@
 import { useEffect, useState } from 'react'
-import { Contract, Model } from '../../../types'
+import { Model } from '../../../types'
 import TableModel from '../table/TableModel'
+import TableData from '../table/TableData'
+import TableControl from '../table/TableControl'
+import TableSkeleton from '../table/TableSkeleton'
 
-const ContractsModel: Model<Contract> = {
-  columns: ['id', 'category', 'name', 'uf', 'institution', 'items', 'price', 'signed', 'due'],
-  viewColumns: [],
+const ContractsModel: Model = {
+  columns: [
+    {
+      id: 'id',
+      label: 'Id',
+      isVisible: true,
+    },
+    {
+      id: 'category',
+      label: 'Categoria',
+      isVisible: true,
+    },
+    {
+      id: 'name',
+      label: 'Nome',
+      isVisible: true,
+    },
+    {
+      id: 'uf',
+      label: 'UF',
+      isVisible: true,
+    },
+    {
+      id: 'institution',
+      label: 'Instituição',
+      isVisible: true,
+    },
+    {
+      id: 'items',
+      label: 'Itens',
+      isVisible: true,
+    },
+    {
+      id: 'price',
+      label: 'Preço',
+      isVisible: true,
+    },
+    {
+      id: 'signed',
+      label: 'Assinado',
+      isVisible: true,
+    },
+    {
+      id: 'due',
+      label: 'Vencimento',
+      isVisible: true,
+    },
+  ],
   data: [],
   viewData: [],
 }
@@ -21,7 +69,6 @@ export default function Contracts() {
           data: contracts,
           columns: contractsModel.columns,
           viewData: contracts,
-          viewColumns: contractsModel.columns,
         })
       })
       .finally(() => setLoading(false))
@@ -30,10 +77,11 @@ export default function Contracts() {
   return (
     <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
       <TableModel
-        loading={loading}
         model={contractsModel}
-        setModel={setContractsModel}
-      />
+        setModel={setContractsModel}>
+        <TableControl />
+        {loading ? <TableSkeleton /> : <TableData />}
+      </TableModel>
     </div>
   )
 }

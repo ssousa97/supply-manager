@@ -1,7 +1,10 @@
 export type Column = {
   id: string
   label: string
-  isVisible?: boolean = true
+  isVisible: boolean
+  suffix?: string
+  prefix?: string
+  format?: (value: any) => string
 }
 
 export type Model = {

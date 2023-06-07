@@ -4,6 +4,8 @@ import { Model } from '../../../types'
 export const TableContext = createContext<{
   model: Model
   setModel: Dispatch<SetStateAction<Model>>
+  selected: any
+  setSelected: Dispatch<SetStateAction<any>>
 } | null>(null)
 
 export const useTableContext = () => {

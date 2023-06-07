@@ -1,49 +1,47 @@
 import { useEffect, useState } from 'react'
 import { Model } from '../../../types'
 import TableModel from '../table/TableModel'
-import TableFilter from '../table/TableFilter'
+import TableControl from '../table/TableControl'
 import TableData from '../table/TableData'
 import TableSkeleton from '../table/TableSkeleton'
-import TableAdvancedFilter from '../table/TableAdvancedFilter'
-import TableColumnFilter from '../table/TableColumnFilter'
 
 const ItemsModel: Model = {
   columns: [
     {
       id: 'id',
       label: 'Id',
+      isVisible: true,
     },
     {
       id: 'name',
       label: 'Nome',
+      isVisible: true,
     },
     {
       id: 'uf',
       label: 'UF',
+      isVisible: true,
     },
     {
       id: 'institution',
       label: 'Instituição',
+      isVisible: true,
     },
     {
       id: 'items',
       label: 'Itens',
+      isVisible: true,
     },
     {
       id: 'category',
       label: 'Categoria',
+      isVisible: true,
     },
     {
       id: 'price',
       label: 'Preço',
-    },
-    {
-      id: 'signed',
-      label: 'Assinado',
-    },
-    {
-      id: 'due',
-      label: 'Vencimento',
+      isVisible: true,
+      prefix: 'R$',
     },
   ],
   data: [],
@@ -52,6 +50,7 @@ const ItemsModel: Model = {
 
 export default function Items() {
   const [itemsModel, setItemsModel] = useState(ItemsModel)
+  const [selected, setSelected] = useState({})
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -71,8 +70,10 @@ export default function Items() {
     <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
       <TableModel
         model={itemsModel}
-        setModel={setItemsModel}>
-        <TableFilter />
+        setModel={setItemsModel}
+        selected={selected}
+        setSelected={setSelected}>
+        <TableControl />
         {loading ? <TableSkeleton /> : <TableData />}
       </TableModel>
     </div>

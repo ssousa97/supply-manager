@@ -6,7 +6,9 @@ export default function User() {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button className="m-auto h-fit w-fit scale-150 rounded-full border-2 p-1 text-white hover:cursor-pointer hover:bg-tertiary">
+        <button
+          className="m-auto h-fit w-fit scale-150 rounded-full border-2 p-1 text-white hover:cursor-pointer 
+                   hover:bg-tertiary">
           <FaUserAlt />
         </button>
       </DropdownMenu.Trigger>
