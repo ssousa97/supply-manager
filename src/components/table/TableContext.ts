@@ -1,11 +1,11 @@
+import { Table } from '@tanstack/react-table'
 import { Dispatch, SetStateAction, createContext, useContext } from 'react'
-import { Model } from '../../../types'
 
 export const TableContext = createContext<{
-  model: Model
-  setModel: Dispatch<SetStateAction<Model>>
-  selected: any
-  setSelected: Dispatch<SetStateAction<any>>
+  table: Table<any>
+  globalFilter: string
+  setGlobalFilter: Dispatch<SetStateAction<string>>
+  setData: Dispatch<SetStateAction<any[]>>
 } | null>(null)
 
 export const useTableContext = () => {

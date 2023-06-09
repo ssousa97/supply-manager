@@ -19,7 +19,7 @@ export type Order = {
   checkInDate: string
   portal: string
   daysUntilExpiration: number
-  dueDate: string
+  dueDate: Moment
   institution: string
   tradeNumber: string
   uf: string
@@ -29,8 +29,8 @@ export type Order = {
   shippingFee: string
   postalCode: string
   status: string
-  dispatchDate: string
-  deliveryDate: string
+  dispatchDate: Moment
+  deliveryDate: Moment
   price: number
 }
 

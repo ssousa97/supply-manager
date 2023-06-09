@@ -1,155 +1,136 @@
+import { FilterFn, createColumnHelper } from '@tanstack/react-table'
+import { Order } from '../../../types'
 import { useEffect, useState } from 'react'
-import TableModel from '../table/TableModel'
-import { Model, Order } from '../../../types'
-import TableData from '../table/TableData'
-import TableControl from '../table/TableControl'
-import TableSkeleton from '../table/TableSkeleton'
+import moment from 'moment'
+import Table from '../table/Table'
 
-/**
- * [
-    'id',
-    'code',
-    'checkInDate',
-    'portal',
-    'daysUntilExpiration',
-    'dueDate',
-    'institution',
-    'tradeNumber',
-    'uf',
-    'receipt',
-    'itemsCategory',
-    'shipping',
-    'shippingFee',
-    'postalCode',
-    'status',
-    'dispatchDate',
-    'deliveryDate',
-    'price',
-  ]
- * 
- */
-const OrdersModel: Model = {
-  columns: [
-    {
-      id: 'id',
-      label: 'Id',
-      isVisible: true,
-    },
-    {
-      id: 'code',
-      label: 'Código',
-      isVisible: true,
-    },
-    {
-      id: 'checkInDate',
-      label: 'Data de entrada',
-      isVisible: true,
-    },
-    {
-      id: 'portal',
-      label: 'Portal',
-      isVisible: true,
-    },
-    {
-      id: 'daysUntilExpiration',
-      label: 'Dias até expirar',
-      isVisible: true,
-    },
-    {
-      id: 'dueDate',
-      label: 'Data de vencimento',
-      isVisible: true,
-    },
-    {
-      id: 'institution',
-      label: 'Instituição',
-      isVisible: true,
-    },
-    {
-      id: 'tradeNumber',
-      label: 'Número do pregão',
-      isVisible: true,
-    },
-    {
-      id: 'uf',
-      label: 'UF',
-      isVisible: true,
-    },
-    {
-      id: 'receipt',
-      label: 'Nota fiscal',
-      isVisible: true,
-    },
-    {
-      id: 'itemsCategory',
-      label: 'Categoria dos itens',
-      isVisible: true,
-    },
-    {
-      id: 'shipping',
-      label: 'Envio',
-      isVisible: true,
-    },
-    {
-      id: 'shippingFee',
-      label: 'Taxa de envio',
-      isVisible: true,
-    },
-    {
-      id: 'postalCode',
-      label: 'CEP',
-      isVisible: true,
-    },
-    {
-      id: 'status',
-      label: 'Status',
-      isVisible: true,
-    },
-    {
-      id: 'dispatchDate',
-      label: 'Data de envio',
-      isVisible: true,
-    },
-    {
-      id: 'deliveryDate',
-      label: 'Data de entrega',
-      isVisible: true,
-    },
-    {
-      id: 'price',
-      label: 'Preço',
-      isVisible: true,
-    },
-  ],
-  data: [],
-  viewData: [],
+const columnHelper = createColumnHelper<Order>()
+
+const alternativeColumnFilterFn: FilterFn<any> = (row, columnId, value) => {
+  const actualValue = String(row.getValue(columnId))
+  return actualValue.includes(value)
 }
 
+const defaultColumns = [
+  columnHelper.accessor('id', {
+    header: 'ID',
+    cell: (item) => item.getValue(),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('code', {
+    header: 'Codigo',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('checkInDate', {
+    header: 'Recebido em',
+    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+  }),
+  columnHelper.accessor('portal', {
+    header: 'Portal',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('daysUntilExpiration', {
+    header: 'Expiração',
+    cell: (item) => item.getValue(),
+    filterFn: alternativeColumnFilterFn,
+  }),
+  columnHelper.accessor('dueDate', {
+    header: 'Vencimento',
+    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('institution', {
+    header: 'Instituição',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('tradeNumber', {
+    header: 'Número do pregão',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('uf', {
+    header: 'UF',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('receipt', {
+    header: 'Nota fiscal',
+    cell: (item) => item.getValue(),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('itemsCategory', {
+    header: 'Categoria',
+    cell: (item) => (
+      <span onClick={(e) => console.log(item.getValue())}>{item.getValue().join(', ')}</span>
+    ),
+  }),
+  columnHelper.accessor('shipping', {
+    header: 'Entrega',
+    cell: (item) => item.getValue(),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('shippingFee', {
+    header: 'Taxa de entrega',
+    cell: (item) => item.getValue(),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('postalCode', {
+    header: 'Codigo postal',
+    cell: (item) => item.getValue(),
+  }),
+  columnHelper.accessor('status', {
+    header: 'Status',
+    cell: (item) => item.getValue(),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('dispatchDate', {
+    header: 'Data de envio',
+    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('deliveryDate', {
+    header: 'Data de chegada',
+    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+    meta: {
+      isCreatable: false,
+    },
+  }),
+  columnHelper.accessor('price', {
+    header: 'Preço',
+    cell: (item) => item.getValue(),
+  }),
+]
+
 export default function Orders() {
-  const [ordersModel, setOrdersModel] = useState(OrdersModel)
-  const [loading, setLoading] = useState(true)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
     fetch('http://localhost:3000/api/orders')
-      .then((response) => response.json())
-      .then(({ orders }) => {
-        setOrdersModel({
-          data: orders,
-          columns: ordersModel.columns,
-          viewData: orders,
-        })
+      .then((res) => res.json())
+      .then((data) => {
+        setOrders(data.orders as Order[])
       })
-      .finally(() => setLoading(false))
   }, [])
 
   return (
-    <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
-      <TableModel
-        model={ordersModel}
-        setModel={setOrdersModel}>
-        <TableControl />
-        {loading ? <TableSkeleton /> : <TableData />}
-      </TableModel>
-    </div>
+    <Table
+      data={orders}
+      setData={setOrders}
+      columns={columns}
+      initialColumnVisibility={{ id: false, code: false }}
+    />
   )
 }

@@ -1,9 +1,5 @@
 import { useEffect, useState } from 'react'
 import { Model } from '../../../types'
-import TableModel from '../table/TableModel'
-import TableControl from '../table/TableControl'
-import TableData from '../table/TableData'
-import TableSkeleton from '../table/TableSkeleton'
 
 const ItemsModel: Model = {
   columns: [
@@ -66,16 +62,5 @@ export default function Items() {
       .finally(() => setLoading(false))
   }, [])
 
-  return (
-    <div className="mx-4 grid h-full grid-rows-[1fr_9fr] gap-y-2">
-      <TableModel
-        model={itemsModel}
-        setModel={setItemsModel}
-        selected={selected}
-        setSelected={setSelected}>
-        <TableControl />
-        {loading ? <TableSkeleton /> : <TableData />}
-      </TableModel>
-    </div>
-  )
+  return <></>
 }
