@@ -19,21 +19,22 @@ import TableFilter from './TableFilter'
 import TableRemoveButton from './TableRemoveButton'
 import TableUploadButton from './TableUploadButton'
 
-const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
-  const itemRank = rankItem(row.getValue(columnId), value)
-  addMeta({
-    itemRank,
-  })
-  return itemRank.passed
-}
-
 declare module '@tanstack/table-core' {
   interface ColumnMeta<TData extends RowData, TValue> {
     isCreatable?: boolean
     isEditable?: boolean
     /** Returns a JSX element that is responsible to handle the column input */
     input?: (value: TValue, onChange: (value: TValue) => void) => JSX.Element
+    inputType?: string
   }
+}
+
+const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
+  const itemRank = rankItem(row.getValue(columnId), value)
+  addMeta({
+    itemRank,
+  })
+  return itemRank.passed
 }
 
 type TableProps<T> = {

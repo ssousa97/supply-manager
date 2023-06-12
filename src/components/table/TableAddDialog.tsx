@@ -1,5 +1,6 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { useTableContext } from './TableContext'
+import TableInput from './TableInput'
 
 export default function TableAddDialog({
   setDialogOpen,
@@ -21,20 +22,13 @@ export default function TableAddDialog({
               key={column.id}
               className="flex flex-col">
               <label className="text-white">{column.columnDef.header as ReactNode}</label>
-              {column.columnDef.meta && column.columnDef.meta.input ? (
-                column.columnDef.meta.input(newValue[column.id], (value: any) => {
+              <TableInput
+                inputType={column.columnDef.meta?.inputType}
+                value={newValue[column.id]}
+                onChange={(value: any) =>
                   setNewValue((prev: any) => ({ ...prev, [column.id]: value }))
-                })
-              ) : (
-                <input
-                  type="text"
-                  className="rounded-xl p-2"
-                  value={newValue[column.id] ?? ''}
-                  onChange={(e) =>
-                    setNewValue((prev: any) => ({ ...prev, [column.id]: e.target.value }))
-                  }
-                />
-              )}
+                }
+              />
             </div>
           ))}
       </div>
