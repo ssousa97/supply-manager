@@ -1,9 +1,9 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { FaPlus } from 'react-icons/fa'
 import { useState } from 'react'
-import TableAddDialog from './TableAddDialog'
+import { FaFileUpload } from 'react-icons/fa'
+import TableUploadDialog from './TableUploadDialog'
 
-export default function TableAddButton() {
+export default function TableUploadButton() {
   const [open, setOpen] = useState(false)
   return (
     <div>
@@ -14,12 +14,12 @@ export default function TableAddButton() {
           <div
             className="ml-2 rounded-xl bg-primary p-2 text-3xl text-white hover:cursor-pointer 
                          hover:bg-tertiary">
-            <FaPlus />
+            <FaFileUpload />
           </div>
         </Dialog.Trigger>
         <Dialog.Overlay className="fixed inset-0 z-10 bg-[rgb(0,0,0,0.5)]" />
         <Dialog.Content>
-          <TableAddDialog setDialogOpen={setOpen} />
+          <TableUploadDialog setDialogOpen={setOpen} />
         </Dialog.Content>
       </Dialog.Root>
     </div>

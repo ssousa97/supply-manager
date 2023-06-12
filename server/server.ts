@@ -9,14 +9,10 @@ dotenv.config()
 
 const app = express()
 
-app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'Hello World 2!',
-  })
-})
-
 await setupMigrations()
 
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
 app.use('/api/items', itemsRouter)
 app.use('/api/orders', ordersRouter)
 app.use('/api/contracts', contractsRouter)

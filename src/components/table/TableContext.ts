@@ -3,9 +3,10 @@ import { Dispatch, SetStateAction, createContext, useContext } from 'react'
 
 export const TableContext = createContext<{
   table: Table<any>
+  setTableData: Dispatch<SetStateAction<any[]>>
+  api: string
   globalFilter: string
   setGlobalFilter: Dispatch<SetStateAction<string>>
-  setData: Dispatch<SetStateAction<any[]>>
 } | null>(null)
 
 export const useTableContext = () => {

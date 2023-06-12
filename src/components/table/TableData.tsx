@@ -6,7 +6,7 @@ export default function TableData() {
 
   return (
     <div className="overflow-auto rounded-xl border-2 bg-accent">
-      <table>
+      <table className="w-full">
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (
             <tr
