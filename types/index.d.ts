@@ -57,3 +57,9 @@ export type Item = {
   signed: string
   due: string
 }
+
+export type Institution = {
+  id: number
+  name: string
+  uf: string
+}

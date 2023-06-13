@@ -1,6 +1,7 @@
 import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { useTableContext } from './TableContext'
 import TableInput from './TableInput'
+import { toast } from 'react-toastify'
 
 export default function TableAddDialog({
   setDialogOpen,
@@ -9,7 +10,6 @@ export default function TableAddDialog({
 }) {
   const { table, setTableData, api } = useTableContext()
   const [newValue, setNewValue] = useState<any>({})
-  const [error, setError] = useState<string | null>(null)
 
   return (
     <div className="fixed left-[50%] top-[50%] z-20 translate-x-[-50%] translate-y-[-50%] rounded-xl bg-primary p-4">
@@ -32,17 +32,13 @@ export default function TableAddDialog({
             </div>
           ))}
       </div>
-      {error && <p className="text-red-500">{error}</p>}
       <div className="flex items-center justify-end text-xl text-white">
         <button
           onClick={() => {
-            if (Object.values(newValue).every((v) => !v)) {
-              setError('Campos inválidos')
-              return
-            }
             setTableData((oldData) =>
               oldData && oldData.length > 0 ? [...oldData, newValue] : [newValue]
             )
+            toast('Adicionado com sucesso!', { type: 'success' })
             fetch(api + '/create', {
               method: 'POST',
               headers: {

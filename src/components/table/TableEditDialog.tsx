@@ -1,16 +1,30 @@
 import { Row } from '@tanstack/react-table'
 import { useState, ReactNode, Dispatch, SetStateAction } from 'react'
 import { useTableContext } from './TableContext'
+import TableInput from './TableInput'
 
-export default function TableEditDialog({
-  selectedRow,
-  setDialogOpen,
-}: {
+type TableEditDialogProps = {
   selectedRow: Row<any>
   setDialogOpen: Dispatch<SetStateAction<boolean>>
-}) {
+}
+
+export default function TableEditDialog({ selectedRow, setDialogOpen }: TableEditDialogProps) {
   const { setTableData, api } = useTableContext()
   const [editValue, setEditValue] = useState(selectedRow.original)
+  const handleClick = () => {
+    setTableData((oldData) => {
+      oldData[selectedRow.index] = editValue
+      return [...oldData]
+    })
+    fetch(api + '/update', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(editValue),
+    })
+    setDialogOpen(false)
+  }
 
   if (!editValue) {
     setDialogOpen(false)
@@ -27,40 +41,19 @@ export default function TableEditDialog({
               key={cell.column.id}
               className="flex flex-col">
               <label className="text-white">{cell.column.columnDef.header as ReactNode}</label>
-              {cell.column.columnDef.meta && cell.column.columnDef.meta.input ? (
-                cell.column.columnDef.meta.input(editValue[cell.column.id], (value: any) => {
+              <TableInput
+                inputType={cell.column.columnDef.meta?.inputType}
+                value={editValue[cell.column.id]}
+                onChange={(value: any) =>
                   setEditValue((prev: any) => ({ ...prev, [cell.column.id]: value }))
-                })
-              ) : (
-                <input
-                  type="text"
-                  className="rounded-xl p-2"
-                  value={editValue[cell.column.id] ?? ''}
-                  onChange={(e) =>
-                    setEditValue((prev: any) => ({ ...prev, [cell.column.id]: e.target.value }))
-                  }
-                />
-              )}
+                }
+              />
             </div>
           ))}
       </div>
       <div className="mt-10 flex items-center justify-end text-xl text-white">
         <button
-          onClick={() => {
-            setTableData((oldData) => {
-              oldData[selectedRow.index] = editValue
-              return [...oldData]
-            })
-
-            fetch(api + '/update', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(editValue),
-            })
-            setDialogOpen(false)
-          }}
+          onClick={handleClick}
           className="rounded-xl bg-secondary p-2 hover:bg-tertiary">
           Salvar
         </button>

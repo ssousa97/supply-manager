@@ -42,6 +42,7 @@ const defaultColumns = [
     meta: {
       isEditable: true,
       isCreatable: true,
+      inputType: 'creatable:institution',
     },
   }),
   columnHelper.accessor('items', {

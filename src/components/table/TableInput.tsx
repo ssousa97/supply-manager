@@ -1,5 +1,6 @@
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import AsyncCreatableSelect from 'react-select/async-creatable'
 
 type TableInputProps = {
   inputType: string | undefined
@@ -9,13 +10,13 @@ type TableInputProps = {
 
 export default function TableInput({ inputType, value, onChange }: TableInputProps) {
   if (inputType?.includes('select')) {
-    const options = inputType.split(':')[1]
+    const optionsType = inputType.split(':')[1]
     return (
       <select
         className="rounded-xl p-2"
         value={value}
-        onChange={onChange}>
-        {getOptions(options).map((option) => (
+        onChange={(e) => onChange(e.target.value)}>
+        {getSimpleOptions(optionsType).map((option) => (
           <option
             key={option}
             value={option}>
@@ -26,9 +27,25 @@ export default function TableInput({ inputType, value, onChange }: TableInputPro
     )
   }
 
+  if (inputType?.includes('creatable')) {
+    const optionsType = inputType.split(':')[1]
+    return (
+      <AsyncCreatableSelect
+        isClearable
+        defaultOptions
+        cacheOptions
+        formatCreateLabel={(inputValue) => `Adicionar "${inputValue}"`}
+        value={{ label: value, value }}
+        onChange={(e) => onChange(e?.value)}
+        loadOptions={async () => await getComplexOptions(optionsType)}
+      />
+    )
+  }
+
   if (inputType === 'date') {
     return (
       <DatePicker
+        className="rounded-xl p-2"
         selected={value}
         onChange={onChange}
       />
@@ -39,14 +56,14 @@ export default function TableInput({ inputType, value, onChange }: TableInputPro
     <input
       type={inputType ?? 'text'}
       className="rounded-xl p-2"
-      value={value}
-      onChange={onChange}
+      value={value ?? ''}
+      onChange={(e) => onChange(e.target.value)}
     />
   )
 }
 
-const getOptions = (options: string) => {
-  switch (options) {
+const getSimpleOptions = (optionsType: string) => {
+  switch (optionsType) {
     case 'uf':
       return [
         'AC',
@@ -77,6 +94,24 @@ const getOptions = (options: string) => {
         'SP',
         'TO',
       ]
+  }
+  return []
+}
+
+const getComplexOptions = async (optionsType: string) => {
+  switch (optionsType) {
+    case 'institution': {
+      const response = await fetch('http://localhost:3000/api/institutions', {
+        method: 'GET',
+      })
+      const { institutions } = await response.json()
+      return institutions.map((institution: any) => {
+        return {
+          label: institution,
+          value: institution,
+        }
+      })
+    }
   }
   return []
 }
