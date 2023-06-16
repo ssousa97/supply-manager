@@ -2,6 +2,7 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import { AiFillCaretDown } from 'react-icons/ai'
 import { useTableContext } from './TableContext'
 import { ReactNode } from 'react'
+import TableInput from './TableInput'
 
 export default function TableColumnFilter() {
   const { table } = useTableContext()
@@ -20,23 +21,18 @@ export default function TableColumnFilter() {
         align="end"
         alignOffset={-10}
         asChild>
-        <div className="z-10 flex select-none flex-col bg-primary p-4">
-          <div className="grid w-[50rem] grid-cols-4 gap-3 rounded-xl  ">
+        <div className="z-10 flex  select-none flex-col rounded-xl bg-primary p-4  ">
+          <div className="grid w-[50rem] grid-cols-4 gap-3 rounded-xl">
             {table.getAllLeafColumns().map((column) => (
               <div
                 className="flex flex-col"
                 key={column.id}>
                 <label className="text-white">{column.columnDef.header as ReactNode}</label>
-                {column.columnDef.meta && column.columnDef.meta.input ? (
-                  column.columnDef.meta.input(column.getFilterValue(), column.setFilterValue)
-                ) : (
-                  <input
-                    type="text"
-                    value={(column.getFilterValue() as string) ?? ''}
-                    onChange={(e) => column.setFilterValue(e.target.value)}
-                    className="rounded-xl p-2"
-                  />
-                )}
+                <TableInput
+                  inputType={column.columnDef.meta?.inputType}
+                  value={(column.getFilterValue() as string) ?? ''}
+                  onChange={column.setFilterValue}
+                />
               </div>
             ))}
           </div>

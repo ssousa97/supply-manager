@@ -40,6 +40,7 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
 type TableProps<T> = {
   data: T[]
   api: string
+  model: string
   setTableData: Dispatch<SetStateAction<T[]>>
   columns: ColumnDef<T, any>[]
   initialColumnVisibility?: Record<string, boolean>
@@ -47,6 +48,7 @@ type TableProps<T> = {
 export default function Table<T>({
   data,
   api,
+  model,
   setTableData,
   columns,
   initialColumnVisibility,
@@ -79,7 +81,8 @@ export default function Table<T>({
   })
 
   return (
-    <TableContext.Provider value={{ table, globalFilter, setGlobalFilter, setTableData, api }}>
+    <TableContext.Provider
+      value={{ table, api, model, globalFilter, setGlobalFilter, setTableData }}>
       <div className="grid h-full grid-rows-[1fr_9fr]">
         <div className="flex items-center">
           <div className="relative w-[50rem]">
@@ -87,9 +90,9 @@ export default function Table<T>({
             <TableColumnFilter />
           </div>
           <TableColumnSelector />
-          <TableAddButton />
+          <TableEditButton type="add" />
+          <TableEditButton type="edit" />
           <TableRemoveButton />
-          <TableEditButton />
           <TableUploadButton />
         </div>
         <TableData />

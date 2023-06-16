@@ -192,6 +192,7 @@ export default function Orders() {
 
   return (
     <Table
+      model="orders"
       data={orders}
       setTableData={setOrders}
       columns={columns}

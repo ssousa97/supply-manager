@@ -1,11 +1,13 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { FaEdit } from 'react-icons/fa'
+import { FaEdit, FaPlus } from 'react-icons/fa'
 import { useTableContext } from './TableContext'
-import TableEditDialog from './TableEditDialog'
 import { useState } from 'react'
+import EditContracts from '../pages/EditContracts'
+import EditItems from '../pages/EditItems'
+import EditOrders from '../pages/EditOrders'
 
-export default function TableEditButton() {
-  const { table } = useTableContext()
+export default function TableEditButton({ type }: { type: 'add' | 'edit' }) {
+  const { table, model } = useTableContext()
   const [open, setOpen] = useState(false)
 
   return (
@@ -18,15 +20,23 @@ export default function TableEditButton() {
             onClick={() => setOpen(true)}
             className="ml-2 select-none rounded-xl bg-primary p-2 text-3xl text-white 
                          hover:cursor-pointer hover:bg-tertiary">
-            <FaEdit />
+            {type === 'add' ? <FaPlus /> : <FaEdit />}
           </div>
         </Dialog.Trigger>
         <Dialog.Overlay className="fixed inset-0 z-10 bg-[rgb(0,0,0,0.5)]" />
         <Dialog.Content>
-          <TableEditDialog
-            setDialogOpen={setOpen}
-            selectedRow={table.getSelectedRowModel().rows[0] ?? { original: null }}
-          />
+          {
+            // TODO: Improve this, make more generic..
+            model === 'contracts' ? (
+              <EditContracts setOpen={setOpen} />
+            ) : model === 'items' ? (
+              <EditItems setOpen={setOpen} />
+            ) : model === 'orders' ? (
+              <EditOrders setOpen={setOpen} />
+            ) : (
+              <></>
+            )
+          }
         </Dialog.Content>
       </Dialog.Root>
     </div>

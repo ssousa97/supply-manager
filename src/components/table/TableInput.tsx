@@ -1,6 +1,6 @@
-import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import AsyncCreatableSelect from 'react-select/async-creatable'
+import IntlCurrencyInput from 'react-intl-currency-input'
 
 type TableInputProps = {
   inputType: string | undefined
@@ -37,17 +37,32 @@ export default function TableInput({ inputType, value, onChange }: TableInputPro
         formatCreateLabel={(inputValue) => `Adicionar "${inputValue}"`}
         value={{ label: value, value }}
         onChange={(e) => onChange(e?.value)}
-        loadOptions={async () => await getComplexOptions(optionsType)}
+        loadOptions={async () => await fetchRemoteOptions(optionsType)}
       />
     )
   }
 
-  if (inputType === 'date') {
+  if (inputType === 'price') {
     return (
-      <DatePicker
-        className="rounded-xl p-2"
-        selected={value}
-        onChange={onChange}
+      <IntlCurrencyInput
+        currency="BRL"
+        config={{
+          locale: 'pt-BR',
+          formats: {
+            number: {
+              BRL: {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              },
+            },
+          },
+        }}
+        inputRef={(ref) => ref && ref.classList.add('rounded-xl', 'p-2')}
+        onChange={(e, value, maskedValue) => onChange(value)}
+        defaultValue={value}
+        max={Number.MAX_SAFE_INTEGER}
       />
     )
   }
@@ -98,7 +113,7 @@ const getSimpleOptions = (optionsType: string) => {
   return []
 }
 
-const getComplexOptions = async (optionsType: string) => {
+const fetchRemoteOptions = async (optionsType: string) => {
   switch (optionsType) {
     case 'institution': {
       const response = await fetch('http://localhost:3000/api/institutions', {

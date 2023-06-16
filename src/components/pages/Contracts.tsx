@@ -55,10 +55,11 @@ const defaultColumns = [
   }),
   columnHelper.accessor('price', {
     header: 'Preço',
-    cell: (item) => item.getValue(),
+    cell: (item) => <span>R$ {item.getValue()}</span>,
     meta: {
       isEditable: true,
       isCreatable: true,
+      inputType: 'price',
     },
   }),
   columnHelper.accessor('signed', {
@@ -94,6 +95,7 @@ export default function Contracts() {
 
   return (
     <Table
+      model="contracts"
       data={contracts}
       setTableData={setContracts}
       api={api}

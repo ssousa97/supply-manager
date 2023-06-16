@@ -100,6 +100,7 @@ export default function Items() {
 
   return (
     <Table
+      model="items"
       data={items}
       setTableData={setItems}
       columns={columns}
