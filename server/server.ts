@@ -1,10 +1,10 @@
 import express, { Request, Response } from 'express'
-import itemsRouter from './routers/items'
+import materialsRouter from './routers/materials'
 import ordersRouter from './routers/orders'
 import contractsRouter from './routers/contracts'
 import dotenv from 'dotenv'
 import { query, setupMigrations } from './database/database'
-import { Institution } from '../types'
+import { Institution } from '../@types'
 
 dotenv.config()
 
@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 
   next()
 })
-app.use('/api/items', itemsRouter)
+app.use('/api/items', materialsRouter)
 app.use('/api/orders', ordersRouter)
 app.use('/api/contracts', contractsRouter)
 app.get('/api/institutions', async (req: Request, res: Response) => {

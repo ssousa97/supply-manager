@@ -1,19 +1,20 @@
 import { useEffect, useState } from 'react'
-import { Contract } from '../../../types'
-import Table from '../table/Table'
+import { Contract } from '../../../../@types'
+import Table from '../../table/Table'
 import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
+import ItemsList from './ItemsList'
 
 const columnHelper = createColumnHelper<Contract>()
 
 const defaultColumns = [
   columnHelper.accessor('id', {
     header: 'Id',
-    cell: (item) => item.getValue(),
+    cell: (value) => value.getValue(),
   }),
   columnHelper.accessor('category', {
     header: 'Categoria',
-    cell: (item) => item.getValue(),
+    cell: (value) => value.getValue(),
     meta: {
       isEditable: true,
       isCreatable: true,
@@ -21,7 +22,7 @@ const defaultColumns = [
   }),
   columnHelper.accessor('name', {
     header: 'Nome',
-    cell: (item) => item.getValue(),
+    cell: (value) => value.getValue(),
     meta: {
       isEditable: true,
       isCreatable: true,
@@ -29,42 +30,43 @@ const defaultColumns = [
   }),
   columnHelper.accessor('uf', {
     header: 'UF',
-    cell: (item) => item.getValue(),
+    cell: (value) => value.getValue(),
     meta: {
       isEditable: true,
       isCreatable: true,
-      inputType: 'select:uf',
+      inputType: 'select:normal:uf',
     },
   }),
   columnHelper.accessor('institution', {
     header: 'Instituição',
-    cell: (item) => item.getValue(),
+    cell: (value) => value.getValue(),
     meta: {
       isEditable: true,
       isCreatable: true,
-      inputType: 'creatable:institution',
+      inputType: 'select:creatable:institution',
     },
   }),
   columnHelper.accessor('items', {
     header: 'Itens',
-    cell: (item) => item.getValue(),
+    cell: (value) => <ItemsList value={value} />,
     meta: {
       isEditable: true,
       isCreatable: true,
+      //inputType: 'select:creatable:itemDescription', TODO
     },
   }),
   columnHelper.accessor('price', {
     header: 'Preço',
-    cell: (item) => <span>R$ {item.getValue()}</span>,
+    cell: (value) => <span>R$ {value.getValue()}</span>,
     meta: {
       isEditable: true,
       isCreatable: true,
       inputType: 'price',
     },
   }),
-  columnHelper.accessor('signed', {
+  columnHelper.accessor('signedAt', {
     header: 'Assinado',
-    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+    cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
     meta: {
       isEditable: true,
       isCreatable: true,
@@ -73,7 +75,7 @@ const defaultColumns = [
   }),
   columnHelper.accessor('due', {
     header: 'Vencimento',
-    cell: (item) => moment(item.getValue()).format('DD/MM/YYYY'),
+    cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
     meta: {
       isEditable: true,
       isCreatable: true,

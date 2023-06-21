@@ -15,7 +15,7 @@ const pages = [
   },
   {
     name: 'Materiais',
-    path: '/items',
+    path: '/materials',
   },
   {
     name: 'Financeiro',

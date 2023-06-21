@@ -1,6 +1,6 @@
 import { useTableContext } from './TableContext'
 
-export default function TableFilter() {
+export default function TableGlobalFilter() {
   const { globalFilter, setGlobalFilter } = useTableContext()
   return (
     <input

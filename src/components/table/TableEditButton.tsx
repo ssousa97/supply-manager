@@ -2,12 +2,12 @@ import * as Dialog from '@radix-ui/react-dialog'
 import { FaEdit, FaPlus } from 'react-icons/fa'
 import { useTableContext } from './TableContext'
 import { useState } from 'react'
-import EditContracts from '../pages/EditContracts'
-import EditItems from '../pages/EditItems'
-import EditOrders from '../pages/EditOrders'
+import EditMaterials from '../pages/materials/EditMaterials'
+import EditOrders from '../pages/orders/EditOrders'
+import EditContracts from '../pages/contracts/EditContracts'
 
 export default function TableEditButton({ type }: { type: 'add' | 'edit' }) {
-  const { table, model } = useTableContext()
+  const { model } = useTableContext()
   const [open, setOpen] = useState(false)
 
   return (
@@ -19,7 +19,7 @@ export default function TableEditButton({ type }: { type: 'add' | 'edit' }) {
           <div
             onClick={() => setOpen(true)}
             className="ml-2 select-none rounded-xl bg-primary p-2 text-3xl text-white 
-                         hover:cursor-pointer hover:bg-tertiary">
+                       hover:cursor-pointer hover:bg-tertiary">
             {type === 'add' ? <FaPlus /> : <FaEdit />}
           </div>
         </Dialog.Trigger>
@@ -28,11 +28,20 @@ export default function TableEditButton({ type }: { type: 'add' | 'edit' }) {
           {
             // TODO: Improve this, make more generic..
             model === 'contracts' ? (
-              <EditContracts setOpen={setOpen} />
-            ) : model === 'items' ? (
-              <EditItems setOpen={setOpen} />
+              <EditContracts
+                setOpen={setOpen}
+                type={type}
+              />
+            ) : model === 'materials' ? (
+              <EditMaterials
+                setOpen={setOpen}
+                type={type}
+              />
             ) : model === 'orders' ? (
-              <EditOrders setOpen={setOpen} />
+              <EditOrders
+                setOpen={setOpen}
+                type={type}
+              />
             ) : (
               <></>
             )

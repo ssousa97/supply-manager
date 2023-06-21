@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express'
-import { Contract } from '../../types'
-import { query, transaction } from '../database/database'
+import { Contract } from '../../@types'
+import { query } from '../database/database'
 
 const contractsRouter = express.Router()
 

@@ -1,15 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-
-import './index.css'
 import App from './App'
 import Dashboard from './components/pages/Dashboard'
 import Config from './components/pages/Config'
 import Finance from './components/pages/Finance'
-import Contracts from './components/pages/Contracts'
-import Items from './components/pages/Items'
-import Orders from './components/pages/Orders'
+import Contracts from './components/pages/contracts/Contracts'
+import Materials from './components/pages/materials/Materials'
+import Orders from './components/pages/orders/Orders'
+import './index.css'
 
 const router = createBrowserRouter([
   {
@@ -33,8 +32,8 @@ const router = createBrowserRouter([
         element: <Contracts />,
       },
       {
-        path: '/items',
-        element: <Items />,
+        path: '/materials',
+        element: <Materials />,
       },
       {
         path: '/orders',

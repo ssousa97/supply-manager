@@ -1,5 +1,5 @@
 import { faker } from '@faker-js/faker'
-import { Contract, Item, Order } from '../types'
+import { Contract, Material, Order } from '../@types'
 
 export function createRandomOrders(size = 100) {
   const randomOrders: Order[] = []
@@ -28,22 +28,20 @@ export function createRandomOrders(size = 100) {
   return randomOrders
 }
 
-export function createRandomItems(size = 100) {
-  const randomItems: Item[] = []
+export function createRandomMaterials(size = 100) {
+  const randomMaterials: Material[] = []
   for (let i = 0; i < size; i++) {
-    randomItems.push({
-      id: faker.number.int().toString(),
-      name: faker.company.name(),
-      uf: ['SP', 'RJ', 'MG', 'ES'][faker.number.int({ min: 0, max: 3 })],
-      institution: faker.company.name(),
-      items: [faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName()],
+    randomMaterials.push({
+      id: faker.number.int(),
+      description: faker.company.name(),
       category: faker.commerce.department(),
-      price: faker.number.int(),
-      signed: faker.date.past().toDateString(),
-      due: faker.date.past().toDateString(),
+      unitPrice: faker.number.int(),
+      code: faker.string.alphanumeric(),
+      unit: faker.helpers.arrayElement(['boxWith10', 'boxWith5', 'boxWith3', 'unitary']),
+      unitQuantity: faker.number.int(),
     })
   }
-  return randomItems
+  return randomMaterials
 }
 
 export function createRandomContracts(size = 100) {
@@ -54,18 +52,16 @@ export function createRandomContracts(size = 100) {
       name: faker.company.name(),
       uf: ['SP', 'RJ', 'MG', 'ES'][faker.number.int({ min: 0, max: 3 })],
       institution: faker.company.name(),
-      items: [faker.commerce.productName(), faker.commerce.productName(), faker.commerce.productName()],
+      items: [
+        faker.commerce.productName(),
+        faker.commerce.productName(),
+        faker.commerce.productName(),
+      ],
       category: faker.commerce.department(),
       price: faker.number.int(),
-      signed: faker.date.past().toDateString(),
+      signedAt: faker.date.past().toDateString(),
       due: faker.date.past().toDateString(),
     })
   }
   return randomContracts
-}
-
-export type Migrations = {
-  id: number
-  name: string
-  timestamp: string
 }

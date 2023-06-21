@@ -1,3 +1,11 @@
+declare module '@tanstack/table-core' {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    isCreatable?: boolean
+    isEditable?: boolean
+    inputType?: string
+  }
+}
+
 export type Column = {
   id: string
   label: string
@@ -34,32 +42,51 @@ export type Order = {
   price: number
 }
 
+export type Item = {
+  id: number
+  code: string
+  description: string
+  category: string
+  unit: string
+  signedPrice: number
+  requestedQuantity: number
+}
+
 export type Contract = {
   id: string
   name: string
   uf: string
   institution: string
-  items: string[]
+  items: Item[]
   category: string
   price: number
-  signed: string
+  signedAt: string
   due: string
 }
 
-export type Item = {
-  id: string
-  name: string
-  uf: string
-  institution: string
-  items: string[]
+export type Material = {
+  id: number
+  code: string
+  description: string
   category: string
-  price: number
-  signed: string
-  due: string
+  unit: string
+  unitPrice: number
+  unitQuantity: number
 }
 
 export type Institution = {
   id: number
   name: string
   uf: string
+}
+
+export type EditModelProps = {
+  setOpen: Dispatch<SetStateAction<boolean>>
+  type: 'add' | 'edit'
+}
+
+export type Migrations = {
+  id: number
+  name: string
+  timestamp: string
 }

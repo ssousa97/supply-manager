@@ -1,9 +1,8 @@
 import { FilterFn, createColumnHelper } from '@tanstack/react-table'
-import { Order } from '../../../types'
 import { useEffect, useState } from 'react'
 import moment from 'moment'
-import Table from '../table/Table'
-import TableInfoDialog from '../table/TableInfoDialog'
+import { Order } from '../../../../@types'
+import Table from '../../table/Table'
 
 const columnHelper = createColumnHelper<Order>()
 
@@ -76,37 +75,6 @@ const defaultColumns = [
     meta: {
       isCreatable: true,
       isEditable: true,
-      input: (value, onChange) => (
-        <select
-          value={value}
-          className="rounded-xl p-2"
-          onChange={(e) => onChange(e.target.value)}>
-          <option value="AL">AL</option>
-          <option value="BA">BA</option>
-          <option value="CE">CE</option>
-          <option value="DF">DF</option>
-          <option value="ES">ES</option>
-          <option value="GO">GO</option>
-          <option value="MA">MA</option>
-          <option value="MG">MG</option>
-          <option value="MS">MS</option>
-          <option value="MT">MT</option>
-          <option value="PA">PA</option>
-          <option value="PB">PB</option>
-          <option value="PE">PE</option>
-          <option value="PI">PI</option>
-          <option value="PR">PR</option>
-          <option value="RJ">RJ</option>
-          <option value="RN">RN</option>
-          <option value="RO">RO</option>
-          <option value="RR">RR</option>
-          <option value="RS">RS</option>
-          <option value="SC">SC</option>
-          <option value="SE">SE</option>
-          <option value="SP">SP</option>
-          <option value="TO">TO</option>
-        </select>
-      ),
     },
   }),
   columnHelper.accessor('receipt', {
@@ -119,7 +87,7 @@ const defaultColumns = [
   }),
   columnHelper.accessor('itemsCategory', {
     header: 'Categoria',
-    cell: (item) => <TableInfoDialog item={item} />,
+    cell: (item) => item.getValue(),
   }),
   columnHelper.accessor('shipping', {
     header: 'Entrega',
