@@ -6,11 +6,13 @@ type AdvancedInputProps = {
   type: string | undefined
   value: any
   onChange: (value: any) => void
+  className?: string
 }
 export default function AdvancedInput({
   type,
   value,
   onChange,
+  className,
 }: AdvancedInputProps) {
   if (type?.startsWith('select')) {
     const [, selectType, optionsType] = type.split(':')
@@ -57,7 +59,11 @@ export default function AdvancedInput({
             },
           },
         }}
-        inputRef={(ref) => ref && ref.classList.add('rounded-xl', 'p-2')}
+        inputRef={(ref) =>
+          className
+            ? className.split(' ').forEach((c) => ref?.classList.add(c))
+            : ref && ref.classList.add('rounded-xl', 'p-2')
+        }
         onChange={(e, value, maskedValue) => onChange(value)}
         defaultValue={value}
         max={Number.MAX_SAFE_INTEGER}
@@ -89,6 +95,7 @@ const getOptions = async (optionsType: string) => {
   }
 }
 
+//TODO: debounce
 async function getInstitutions() {
   const { institutions } = await fetch(
     'http://localhost:3000/api/institutions'

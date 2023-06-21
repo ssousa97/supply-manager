@@ -2,6 +2,7 @@ import { Dispatch } from 'react'
 import { FaMinus } from 'react-icons/fa'
 
 import { Item } from '../../../../@types'
+import AdvancedInput from '../../common/AdvancedInput'
 
 type EditItemsProps = {
   index: number
@@ -28,8 +29,8 @@ export default function EditItems({ index, item, dispatch }: EditItemsProps) {
             value={item.requestedQuantity}
             onChange={(e) =>
               dispatch({
-                type: 'requestedQuantity',
-                payload: { newValue: e.target.value, index },
+                type: 'itemRequestedQuantity',
+                payload: { newValue: parseInt(e.target.value), index },
               })
             }
             className="w-16 rounded-xl p-1"
@@ -37,16 +38,16 @@ export default function EditItems({ index, item, dispatch }: EditItemsProps) {
         </div>
         <div className="flex flex-col">
           <label className="text-xs text-white">Preço un.</label>
-          <input
-            type="text"
+          <AdvancedInput
+            type="price"
             value={item.signedPrice}
-            onChange={(e) =>
+            onChange={(val) =>
               dispatch({
-                type: 'signedPrice',
-                payload: { newValue: e.target.value, index },
+                type: 'itemSignedPrice',
+                payload: { newValue: val, index },
               })
             }
-            className="w-16 rounded-xl p-1"
+            className="w-24 rounded-xl p-1"
           />
         </div>
         <div className="flex flex-col">
@@ -56,7 +57,7 @@ export default function EditItems({ index, item, dispatch }: EditItemsProps) {
             value={item.code}
             onChange={(e) =>
               dispatch({
-                type: 'code',
+                type: 'itemCode',
                 payload: { newValue: e.target.value, index },
               })
             }
@@ -70,7 +71,7 @@ export default function EditItems({ index, item, dispatch }: EditItemsProps) {
             value={item.unit}
             onChange={(e) =>
               dispatch({
-                type: 'unit',
+                type: 'itemUnit',
                 payload: { newValue: e.target.value, index },
               })
             }

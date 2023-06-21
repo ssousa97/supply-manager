@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react'
 import { FaPlus } from 'react-icons/fa'
-
+import { toast } from 'react-toastify'
 import { Contract, EditModelProps, Item } from '../../../../@types'
 import { useTableContext } from '../../table/TableContext'
 import EditItems from './EditItems'
@@ -12,6 +12,8 @@ function reducer(state: Contract, action: any): Contract {
       return { ...state, name: action.payload }
     case 'uf':
       return { ...state, uf: action.payload }
+    case 'category':
+      return { ...state, category: action.payload }
     case 'institution':
       return { ...state, institution: action.payload }
     case 'signedAt':
@@ -38,14 +40,24 @@ function reducer(state: Contract, action: any): Contract {
         ...state,
         items: state.items.filter((_, index) => index !== action.payload),
       }
-    case 'requestedQuantity': {
+    case 'itemRequestedQuantity': {
       const { index, newValue } = action.payload
       state.items[index].requestedQuantity = newValue
       return { ...state }
     }
-    case 'signedPrice': {
+    case 'itemSignedPrice': {
       const { index, newValue } = action.payload
       state.items[index].signedPrice = newValue
+      return { ...state }
+    }
+    case 'itemUnit': {
+      const { index, newValue } = action.payload
+      state.items[index].unit = newValue
+      return { ...state }
+    }
+    case 'itemCode': {
+      const { index, newValue } = action.payload
+      state.items[index].code = newValue
       return { ...state }
     }
     default:
@@ -64,13 +76,18 @@ export default function EditContracts({ setOpen, type }: EditModelProps) {
       : _emptyContract
   const [contract, dispatch] = useReducer(reducer, initialContract)
   const [itemDescription, setItemDescription] = useState('')
-  localStorage.setItem('contract', JSON.stringify(contract))
 
+  localStorage.setItem('contract', JSON.stringify(contract))
   contract.price = contract.items?.reduce(
     (acc, item) => acc + item.requestedQuantity * item.signedPrice,
     0
   )
+
   const save = () => {
+    if (!validate()) {
+      toast('Existem campos faltantes, preencha todos.', { type: 'error' })
+      return
+    }
     setTableData((data) => {
       if (type === 'edit') {
         data.splice(table.getSelectedRowModel().rows[0].index, 1, contract)
@@ -80,12 +97,30 @@ export default function EditContracts({ setOpen, type }: EditModelProps) {
     })
     setOpen(false)
   }
+
+  //todo: inform which field is misisng
+  const validate = () => {
+    if (!contract.name) return false
+    if (!contract.uf) return false
+    if (!contract.institution) return false
+    if (!contract.category) return false
+    if (!contract.signedAt) return false
+    if (!contract.due) return false
+    if (!contract.items) return false
+    if (contract.items.length === 0) return false
+    if (contract.items.some((item) => !item.description)) return false
+    if (contract.items.some((item) => !item.requestedQuantity)) return false
+    if (contract.items.some((item) => !item.signedPrice)) return false
+    if (contract.items.some((item) => !item.unit)) return false
+    if (contract.items.some((item) => !item.code)) return false
+    return true
+  }
   return (
     <div className="fixed left-[50%] top-[50%] z-20 flex translate-x-[-50%] translate-y-[-50%] flex-col gap-y-4 rounded-xl bg-primary p-4">
       <h1 className="text-lg text-white">Editar Contratos</h1>
       {/* row */}
-      <div className="flex gap-4">
-        <div className="flex flex-col">
+      <div className="flex justify-between gap-4">
+        <div className="flex flex-1 flex-col">
           <label
             htmlFor="name"
             className="text-white">
@@ -102,7 +137,7 @@ export default function EditContracts({ setOpen, type }: EditModelProps) {
             }
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-1 flex-col">
           <label
             htmlFor="uf"
             className="text-white">
@@ -114,15 +149,25 @@ export default function EditContracts({ setOpen, type }: EditModelProps) {
             onChange={(val) => dispatch({ type: 'uf', payload: val })}
           />
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-1 flex-col">
+          <label
+            htmlFor="category"
+            className="text-white">
+            Categoria
+          </label>
+          <AdvancedInput
+            type="select:creatable:category"
+            value={contract.category}
+            onChange={(val) => dispatch({ type: 'category', payload: val })}
+          />
+        </div>
+        <div className="flex  flex-1 flex-col">
           <label
             htmlFor="price"
             className="text-white">
             Preço total
           </label>
-          <span className="self-center p-1 text-2xl text-white">
-            {'R$: ' + contract.price}
-          </span>
+          <span className="text-2xl text-white">{'R$: ' + contract.price}</span>
         </div>
       </div>
       {/* row */}

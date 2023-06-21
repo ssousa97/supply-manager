@@ -23,6 +23,7 @@ export default function ItemsList({
           {value.getValue().map((item) => (
             <li key={item.id}>
               <span>{item.description}</span>
+              <span>{item.code}</span>
             </li>
           ))}
         </ul>
