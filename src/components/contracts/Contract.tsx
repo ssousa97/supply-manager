@@ -1,9 +1,9 @@
 import { useParams } from 'react-router-dom'
 import { Contract } from './Contracts'
 import { useEffect, useReducer, useRef } from 'react'
-import Input from '../common/Input'
 import Items from './Items'
 import moment from 'moment'
+import Select from '../common/Select'
 
 const newContract: Contract = {
   id: '0',
@@ -90,6 +90,7 @@ export default function Contract() {
   const { id } = useParams()
   const [contract, dispatch] = useReducer(reducer, newContract)
   const itemDescriptionRef = useRef<HTMLInputElement | null>(null)
+
   useEffect(() => {
     if (id === 'new') return
     fetch(`http://localhost:3000/api/contracts/${id}`)
@@ -103,8 +104,7 @@ export default function Contract() {
       0
     ) ?? 0
 
-  contract.due =
-    moment(contract.signedAt).add(12, 'months').format('DD/MM/YYYY') ?? ''
+  contract.due = moment(contract.signedAt).add(12, 'months').toString() ?? ''
 
   const addItem = (description: string | undefined) => {
     if (description === undefined || description === '' || description === null)
@@ -129,7 +129,9 @@ export default function Contract() {
         <div className="flex flex-1 flex-col">
           <label htmlFor="contractPrice">Vencimento</label>
           <span className="text-2xl font-bold text-white">
-            {contract.due === 'Invalid date' ? '' : contract.due}
+            {contract.due === 'Invalid date'
+              ? ''
+              : moment(contract.due).format('DD/MM/YYYY')}
           </span>
         </div>
       </div>
@@ -151,8 +153,8 @@ export default function Contract() {
         </div>
         <div className="flex flex-1 flex-col">
           <label htmlFor="name">UF</label>
-          <Input
-            type="select:creatable:uf"
+          <Select
+            optionType="uf"
             value={contract.uf}
             onChange={(value) => {
               dispatch({
@@ -181,8 +183,8 @@ export default function Contract() {
       <div className="flex gap-2">
         <div className="flex flex-1 flex-col">
           <label htmlFor="name">Instituição</label>
-          <Input
-            type="select:creatable:institution"
+          <Select
+            optionType="institution"
             value={contract.institution}
             onChange={(value) => {
               dispatch({
@@ -194,8 +196,8 @@ export default function Contract() {
         </div>
         <div className="flex flex-1 flex-col">
           <label htmlFor="name">Categoria</label>
-          <Input
-            type="select:creatable:category"
+          <Select
+            optionType="category"
             value={contract.category}
             onChange={(value) => {
               dispatch({
@@ -237,7 +239,15 @@ export default function Contract() {
         <button className="btn-error btn-sm btn">Limpar</button>
         <button
           className="btn-success btn-sm btn"
-          onClick={() => console.log(contract)}>
+          onClick={() => {
+            fetch('http://localhost:3000/api/contracts/create', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify(contract),
+            })
+          }}>
           Salvar
         </button>
       </div>

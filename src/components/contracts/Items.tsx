@@ -1,6 +1,7 @@
 import { Dispatch } from 'react'
 import { Item } from './Contracts'
 import Input from '../common/Input'
+import Select from '../common/Select'
 
 type ItemsProps = {
   items: Item[]
@@ -50,8 +51,8 @@ export default function Items({ items, dispatch }: ItemsProps) {
                 </div>
                 <div className="flex flex-1 flex-col">
                   <label htmlFor="description">Categoria</label>
-                  <Input
-                    type="select:creatable:category"
+                  <Select
+                    optionType="category"
                     value={item.category}
                     className="input-sm"
                     onChange={(val) =>

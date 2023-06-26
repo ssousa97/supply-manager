@@ -28,5 +28,13 @@ export async function getOptions(optionType: string) {
       { label: 'TO', value: 'TO' },
     ]
   }
+  if (optionType === 'institution') {
+    const { institutions } = await fetch(
+      'http://localhost:3000/api/institutions'
+    ).then((res) => res.json())
+    return institutions.map((institution: string) => {
+      return { label: institution, value: institution }
+    })
+  }
   return []
 }
