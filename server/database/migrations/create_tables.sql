@@ -1,22 +1,22 @@
 create table if not exists institution(
   id uuid primary key default gen_random_uuid(),
-  name varchar(255) not null
+  name varchar(255) not null unique
 );
 
 create table if not exists category(
   id uuid primary key default gen_random_uuid(),
-  name varchar(255) not null
+  name varchar(255) not null unique
 );
 
 create table if not exists item(
   id uuid primary key default gen_random_uuid(),
-  code varchar(255) not null,
-  quantity_on_stock int not null
+  code varchar(255) not null unique,
+  quantity_on_stock int default 0
 );
 
 create table if not exists contract(
   id uuid primary key default gen_random_uuid(),
-  name varchar(255) not null,
+  name varchar(255) not null unique,
   signed_date date not null,
   due_date date not null,
   total_price decimal not null,
@@ -40,7 +40,7 @@ create table if not exists contract_category(
 
 create table if not exists "order"(
   id uuid primary key default gen_random_uuid(),
-  name varchar(255) not null,
+  name varchar(255) not null unique,
   check_in_date date not null,
   portal varchar(255) not null,
   due_date date not null,

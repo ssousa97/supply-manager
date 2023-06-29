@@ -27,3 +27,4 @@ select
 		) from contract_item ci where c.id = ci.contract_id 
 	) as "items"
 from contract c
+where c.id = $1
