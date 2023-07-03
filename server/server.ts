@@ -1,5 +1,5 @@
 import express, { Request, Response } from 'express'
-import materialsRouter from './routers/materials'
+import itemsRouter from './routers/items'
 import ordersRouter from './routers/orders'
 import contractsRouter from './routers/contracts'
 import dotenv from 'dotenv'
@@ -22,7 +22,7 @@ app.use((req, res, next) => {
   next()
 })
 app.use('/api/contracts', contractsRouter)
-app.use('/api/materials', materialsRouter)
+app.use('/api/items', itemsRouter)
 app.use('/api/orders', ordersRouter)
 app.get('/api/institutions', async (req: Request, res: Response) => {})
 app.listen(3000, () => console.log('Server is running'))

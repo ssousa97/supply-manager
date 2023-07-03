@@ -4,27 +4,25 @@ select
 	c.signed_date as "signedDate", 
 	c.due_date as "dueDate", 
 	c.total_price as "totalPrice", 
-  (select array_agg(cat.name) 
-    from category cat 
-    inner join contract_category c_cat 
-    on cat.id = c_cat.category_id 
-    where c_cat.contract_id = c.id
-	) as "categories", 
-  (select array_agg(inst.name) 
-    from institution inst 
-    where inst.id = c.institution_id
-	) as "institutions",
+  json_agg(cast(cat.name as json)) as "categories",
+  inst.name as "institution",
 	(select 
-		array_agg(
+		json_agg(
 			json_build_object(
 				'id', ci.id, 
 				'signedPricePerBatch', ci.signed_price_per_batch, 
 				'totalRequestedBatchQuantity', ci.total_requested_batch_quantity, 
 				'amountPerBatch', ci.amount_per_batch,
 				'description', ci.description,
-				'code', (select code from item i where i.id = ci.item_id)
+				'code', cast(i.code as json)
 			)
-		) from contract_item ci where c.id = ci.contract_id 
+		) from contract_item ci inner join item i
+	 	  on ci.item_id = i.id
+	 	  where c.id = ci.contract_id 
 	) as "items"
-from contract c
+from contract c 
+inner join institution inst on c.institution_id = inst.id
+inner join contract_category cc on c.id = cc.contract_id
+inner join category cat on cat.id = cc.category_id
 where c.id = $1
+group by c.id, c.name, c.signed_date, c.due_date, c.total_price, inst.name;

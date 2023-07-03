@@ -11,25 +11,23 @@ contractsRouter.get('/', async (req: Request, res: Response) => {
 contractsRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
   const contract = await db.oneOrNone(queries.contracts_get, [id])
+
   res.json({ contract })
 })
 
-contractsRouter.post('/create', async (req: Request, res: Response) => {
+contractsRouter.post('/upsert', async (req: Request, res: Response) => {
   const { contract } = req.body
+
   try {
-    await db.func('insert_contract', [contract])
+    await db.func('upsert_contract', [contract])
     res.json({ status: 'success' })
   } catch (err) {
-    console.log(err)
-
     res.json({
       status: 'failed',
-      message: err,
+      message: (err as any).message,
     })
   }
 })
-
-contractsRouter.post('/update', async (req: Request, res: Response) => {})
 
 contractsRouter.post('/delete', async (req: Request, res: Response) => {})
 
