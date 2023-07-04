@@ -11,7 +11,6 @@ contractsRouter.get('/', async (req: Request, res: Response) => {
 contractsRouter.get('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
   const contract = await db.oneOrNone(queries.contracts_get, [id])
-
   res.json({ contract })
 })
 

@@ -1,9 +1,9 @@
 import express, { Request, Response } from 'express'
 import { db } from '../database/init'
 
-const materialsRouter = express.Router()
+const itemsRouter = express.Router()
 
-materialsRouter.get('/', async (req: Request, res: Response) => {
+itemsRouter.get('/', async (req: Request, res: Response) => {
   const items = await db.any('select id, code, quantity_on_stock as "quantityOnStock" from item')
 
   res.json({
@@ -11,4 +11,20 @@ materialsRouter.get('/', async (req: Request, res: Response) => {
   })
 })
 
-export default materialsRouter
+itemsRouter.post('/upsert', async (req: Request, res: Response) => {
+  const { item } = req.body
+
+  try {
+    await db.func('upsert_item', [item])
+    res.json({
+      status: 'success',
+    })
+  } catch (err) {
+    res.json({
+      status: 'failed',
+      message: (err as any).message,
+    })
+  }
+})
+
+export default itemsRouter

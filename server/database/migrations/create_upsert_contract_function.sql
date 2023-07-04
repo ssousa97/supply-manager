@@ -42,11 +42,11 @@ begin
   end if;
 
   delete from contract_category where contract_id = contractId;
-  for contractCategoryName in select * from json_array_elements(newContract->'categories')
+  for contractCategoryName in select * from json_array_elements_text(newContract->'categories')
   loop
     select id into contractCategoryId from category where name = contractCategoryName;
     if contractCategoryId is null then
-      insert into category(name) values (replace(contractCategoryName, '"', '')) returning id into contractCategoryId;
+      insert into category(name) values (contractCategoryName) returning id into contractCategoryId;
     end if;
     insert into contract_category(contract_id, category_id) values(contractId, contractCategoryId);
   end loop;
