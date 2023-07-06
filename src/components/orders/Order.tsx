@@ -23,6 +23,42 @@ const newOrder: IOrder = {
 }
 
 function reducer(state: IOrder, action: any): IOrder {
+  switch (action.type) {
+    case 'set':
+      return { ...action.payload }
+    case 'name':
+      return { ...state, name: action.payload }
+    case 'checkInDate':
+      return { ...state, checkInDate: action.payload }
+    case 'portal':
+      return { ...state, portal: action.payload }
+    case 'trade':
+      return { ...state, trade: action.payload }
+    case 'receipt':
+      return { ...state, receipt: action.payload }
+    case 'uf':
+      return { ...state, uf: action.payload }
+    case 'price':
+      return { ...state, price: action.payload }
+    case 'dispatchDate':
+      return { ...state, dispatchDate: action.payload }
+    case 'deliveryDate':
+      return { ...state, deliveryDate: action.payload }
+    case 'shipping':
+      return { ...state, shipping: action.payload }
+    case 'shippingFee':
+      return { ...state, shippingFee: action.payload }
+    case 'postalCode':
+      return { ...state, postalCode: action.payload }
+    case 'status':
+      return { ...state, status: action.payload }
+    case 'institution':
+      return { ...state, institution: action.payload }
+    case 'contractName':
+      return { ...state, contractName: action.payload }
+    case 'categories':
+      return { ...state, categories: action.payload }
+  }
   return { ...state }
 }
 
@@ -67,7 +103,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.portal}
               onChange={(e) => dispatch({ type: 'portal', payload: e.target.value })}
             />
           </div>
@@ -76,7 +112,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.trade}
               onChange={(e) => dispatch({ type: 'trade', payload: e.target.value })}
             />
           </div>
@@ -96,7 +132,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.price}
               onChange={(e) => dispatch({ type: 'price', payload: e.target.value })}
             />
           </div>
@@ -105,7 +141,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.postalCode}
               onChange={(e) => dispatch({ type: 'postalCode', payload: e.target.value })}
             />
           </div>
@@ -133,7 +169,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.receipt}
               onChange={(e) => dispatch({ type: 'receipt', payload: e.target.value })}
             />
           </div>
@@ -142,7 +178,7 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
+              value={order.dispatchDate}
               onChange={(e) => dispatch({ type: 'dispatchDate', payload: e.target.value })}
             />
           </div>
@@ -151,8 +187,8 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
-              onChange={(e) => dispatch({ type: 'name', payload: e.target.value })}
+              value={order.deliveryDate}
+              onChange={(e) => dispatch({ type: 'deliveryDate', payload: e.target.value })}
             />
           </div>
           <div className="flex-1">
@@ -160,8 +196,8 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
-              onChange={(e) => dispatch({ type: 'name', payload: e.target.value })}
+              value={order.contractName}
+              onChange={(e) => dispatch({ type: 'contractName', payload: e.target.value })}
             />
           </div>
         </div>
@@ -171,8 +207,8 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
-              onChange={(e) => dispatch({ type: 'name', payload: e.target.value })}
+              value={order.shipping}
+              onChange={(e) => dispatch({ type: 'shipping', payload: e.target.value })}
             />
           </div>
           <div className="flex-1">
@@ -180,8 +216,8 @@ export default function Order() {
             <input
               type="text"
               className="input input-sm block w-full"
-              value={order.name}
-              onChange={(e) => dispatch({ type: 'name', payload: e.target.value })}
+              value={order.shippingFee}
+              onChange={(e) => dispatch({ type: 'shippingFee', payload: e.target.value })}
             />
           </div>
         </div>
