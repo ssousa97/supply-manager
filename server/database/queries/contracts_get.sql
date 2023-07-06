@@ -1,10 +1,11 @@
 select 
   c.id as "id",
 	c.name as "name", 
+  c.uf as "uf",
 	c.signed_date as "signedDate", 
 	c.due_date as "dueDate", 
 	c.total_price as "totalPrice", 
-  json_agg(cast(cat.name as json)) as "categories",
+  array_agg(cat.name) as "categories",
   inst.name as "institution",
 	(select 
 		json_agg(
@@ -14,7 +15,7 @@ select
 				'totalRequestedBatchQuantity', ci.total_requested_batch_quantity, 
 				'amountPerBatch', ci.amount_per_batch,
 				'description', ci.description,
-				'code', cast(i.code as json)
+				'code', i.code
 			)
 		) from contract_item ci inner join item i
 	 	  on ci.item_id = i.id

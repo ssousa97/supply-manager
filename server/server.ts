@@ -1,7 +1,9 @@
-import express, { Request, Response } from 'express'
-import itemsRouter from './routers/items'
-import ordersRouter from './routers/orders'
-import contractsRouter from './routers/contracts'
+import express from 'express'
+import itemsRouter from './routers/itemsRouter'
+import ordersRouter from './routers/ordersRouter'
+import contractsRouter from './routers/contractsRouter'
+import institutionsRouter from './routers/institutionsRouter'
+import categoriesRouter from './routers/categoriesRouter'
 import dotenv from 'dotenv'
 import { setupMigrations, loadQueries } from './database/init'
 
@@ -24,5 +26,7 @@ app.use((req, res, next) => {
 app.use('/api/contracts', contractsRouter)
 app.use('/api/items', itemsRouter)
 app.use('/api/orders', ordersRouter)
-app.get('/api/institutions', async (req: Request, res: Response) => {})
+app.use('/api/institutions', institutionsRouter)
+app.use('/api/categories', categoriesRouter)
+
 app.listen(3000, () => console.log('Server is running'))

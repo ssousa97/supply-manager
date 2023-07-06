@@ -1,7 +1,4 @@
-import AsyncCreatableSelect from 'react-select/async-creatable'
-import AsyncSelect from 'react-select/async'
 import IntlCurrencyInput from 'react-intl-currency-input'
-import { getOptions } from '../../services/getOptions'
 
 type InputProps = {
   type: string
@@ -9,52 +6,7 @@ type InputProps = {
   className?: string
   onChange: (value: any) => void
 }
-export default function Input({
-  type,
-  value,
-  className,
-  onChange,
-}: InputProps) {
-  const [inputType, mode, optionType] = type.split(':')
-
-  if (inputType === 'select') {
-    switch (mode) {
-      case 'normal': {
-        return (
-          <AsyncSelect
-            unstyled
-            defaultOptions
-            cacheOptions
-            classNames={{
-              control: () => `input ${className ?? ''}`,
-              menu: () => 'bg-neutral p-2',
-              option: () => 'hover:bg-accent pl-2',
-            }}
-            defaultValue={value}
-            onChange={(value) => onChange(value.value)}
-            loadOptions={async () => await getOptions(optionType)}
-          />
-        )
-      }
-      case 'creatable': {
-        return (
-          <AsyncCreatableSelect
-            unstyled
-            defaultOptions
-            cacheOptions
-            classNames={{
-              control: () => `input !min-h-[2rem] ${className ?? ''} `,
-              menu: () => 'bg-neutral p-2',
-              option: () => 'hover:bg-accent pl-2',
-            }}
-            defaultValue={value}
-            onChange={(value) => onChange(value.value)}
-            loadOptions={async () => await getOptions(optionType)}
-          />
-        )
-      }
-    }
-  }
+export default function Input({ type, value, className, onChange }: InputProps) {
   if (type === 'price') {
     return (
       <IntlCurrencyInput
@@ -72,15 +24,14 @@ export default function Input({
             },
           },
         }}
-        inputRef={(ref) =>
-          ref && ref.classList.add('input', `${className ?? ''}`)
-        }
+        inputRef={(ref) => ref && ref.classList.add('input', `${className ?? ''}`)}
         onChange={(e, value, maskedValue) => onChange(value)}
-        defaultValue={value}
+        defaultValue={parseFloat(value === '' ? 0 : value)}
         max={Number.MAX_SAFE_INTEGER}
       />
     )
   }
+
   return (
     <input
       type={type}

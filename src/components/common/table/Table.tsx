@@ -3,6 +3,7 @@ import {
   ColumnDef,
   ColumnFiltersState,
   FilterFn,
+  RowData,
   getCoreRowModel,
   getFilteredRowModel,
   useReactTable,
@@ -20,6 +21,11 @@ const fuzzyFilter: FilterFn<any> = (row, columnId, value, addMeta) => {
   return itemRank.passed
 }
 
+declare module '@tanstack/table-core' {
+  interface ColumnMeta<TData extends RowData, TValue> {
+    inputType?: string
+  }
+}
 export type TableProps<T> = {
   data: T[]
   columns: ColumnDef<T, any>[]
@@ -29,17 +35,8 @@ export type TableProps<T> = {
   setTableData: Dispatch<SetStateAction<T[]>>
 }
 
-export default function Table<T>({
-  data,
-  columns,
-  api,
-  model,
-  initialColumnVisibility,
-  setTableData,
-}: TableProps<T>) {
-  const [columnVisibility, setColumnVisibility] = useState(
-    initialColumnVisibility ?? {}
-  )
+export default function Table<T>({ data, columns, api, model, initialColumnVisibility, setTableData }: TableProps<T>) {
+  const [columnVisibility, setColumnVisibility] = useState(initialColumnVisibility ?? {})
   const [globalFilter, setGlobalFilter] = useState('')
   const [rowSelection, setRowSelection] = useState({})
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
@@ -58,6 +55,7 @@ export default function Table<T>({
     globalFilterFn: fuzzyFilter,
     enableRowSelection: true,
     enableMultiRowSelection: false,
+    enableColumnFilters: true,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     onColumnFiltersChange: setColumnFilters,

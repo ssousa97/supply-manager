@@ -15,7 +15,7 @@ select
   o.postal_code as "postalCode",
   o.status,
   i.name as "institution",
-  c.name as "contract",
+  c.name as "contractName",
   array_agg(cat.name) as "categories",
   (select 
 		json_agg(

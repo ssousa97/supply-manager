@@ -19,9 +19,10 @@ begin
   end if;
 
   if newContract->>'id' is null then
-    insert into contract(name, signed_date, due_date, total_price, institution_id)  
+    insert into contract(name, uf, signed_date, due_date, total_price, institution_id)  
       values(
         newContract->>'name', 
+        newContract->>'uf',
         cast(newContract->>'signedDate' as date), 
         cast(newContract->>'dueDate' as date),
         cast(newContract->>'totalPrice' as numeric),

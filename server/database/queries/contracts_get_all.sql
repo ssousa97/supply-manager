@@ -1,6 +1,7 @@
 select 
   c.id as "id",
   c.name as "name", 
+  c.uf as "uf",
   c.signed_date as "signedDate", 
   c.due_date as "dueDate", 
   c.total_price as "totalPrice", 

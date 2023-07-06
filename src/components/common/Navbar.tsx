@@ -10,16 +10,12 @@ const navbarLinks = [
     path: '/contracts',
   },
   {
-    title: 'Ordens',
+    title: 'Empenhos',
     path: '/orders',
   },
   {
-    title: 'Notas fiscais',
-    path: '/receipts',
-  },
-  {
-    title: 'Materiais',
-    path: '/materials',
+    title: 'Estoque',
+    path: '/items',
   },
   {
     title: 'Financeiro',

@@ -28,13 +28,30 @@ export async function getOptions(optionType: string) {
       { label: 'TO', value: 'TO' },
     ]
   }
-  if (optionType === 'institution') {
-    const { institutions } = await fetch(
-      'http://localhost:3000/api/institutions'
-    ).then((res) => res.json())
-    return institutions.map((institution: string) => {
-      return { label: institution, value: institution }
+  if (optionType === 'institutions') {
+    const { institutions } = await fetch('http://localhost:3000/api/institutions').then((res) => res.json())
+
+    return institutions.map((institution: any) => {
+      return { label: institution.name, value: institution.name }
+    })
+  }
+
+  if (optionType === 'categories') {
+    const { categories } = await fetch('http://localhost:3000/api/categories').then((res) => res.json())
+
+    return categories.map((category: any) => {
+      return { label: category.name, value: category.name }
+    })
+  }
+
+  if (optionType === 'itemsCodes') {
+    const { codes } = await fetch('http://localhost:3000/api/items/codes').then((res) => res.json())
+    return codes.map((code: any) => {
+      return { label: code.code, value: code.code }
     })
   }
   return []
 }
+
+export const makeOptions = (values: string[]) => values.map((value) => ({ value, label: value }))
+export const makeOption = (value: string) => ({ label: value, value })

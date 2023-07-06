@@ -5,13 +5,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ErrorPage from './ErrorPage.tsx'
 import Contracts from './components/contracts/Contracts.tsx'
 import Orders from './components/orders/Orders.tsx'
-import Receipts from './components/receipts/Receipts.tsx'
-import Materials from './components/materials/Materials.tsx'
+import Items from './components/items/Items.tsx'
 import Finance from './components/finance/Finance.tsx'
 import Config from './components/config/Config.tsx'
 import Contract from './components/contracts/Contract.tsx'
 import Order from './components/orders/Order.tsx'
-import Receipt from './components/receipts/Receipt.tsx'
 import './index.css'
 import Dashboard from './components/dashboard/Dashboard.tsx'
 
@@ -41,16 +39,8 @@ const routes = {
       element: <Order />,
     },
     {
-      path: 'receipts',
-      element: <Receipts />,
-    },
-    {
-      path: 'receipt/:id',
-      element: <Receipt />,
-    },
-    {
-      path: 'materials',
-      element: <Materials />,
+      path: 'items',
+      element: <Items />,
     },
     {
       path: 'finance',

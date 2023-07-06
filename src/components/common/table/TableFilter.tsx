@@ -2,6 +2,7 @@ import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import { FaCaretDown } from 'react-icons/fa'
 import { useTableContext } from './TableContext'
 import Input from '../Input'
+import IntlCurrencyInput from 'react-intl-currency-input'
 
 export default function TableFilter() {
   const { table, globalFilter, setGlobalFilter } = useTableContext()
@@ -29,13 +30,12 @@ export default function TableFilter() {
                 <div
                   key={column.id}
                   className="flex flex-col">
-                  <label htmlFor="">
-                    {column.columnDef.header?.toString()}
-                  </label>
-                  <Input
-                    type={column.columnDef.meta?.inputType ?? 'text'}
-                    value={column.getFilterValue() ?? ''}
-                    onChange={column.setFilterValue}
+                  <label htmlFor="">{column.columnDef.header?.toString()}</label>
+                  <input
+                    type={column.columnDef.meta?.inputType}
+                    value={(column.getFilterValue() as any) ?? ''}
+                    onChange={(e) => column.setFilterValue(e.target.value)}
+                    className="input input-sm"
                   />
                 </div>
               ))}

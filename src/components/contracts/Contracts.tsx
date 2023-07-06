@@ -2,116 +2,79 @@ import { createColumnHelper } from '@tanstack/react-table'
 import Table from '../common/table/Table'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
+import { ContractSchema, IContract } from '../../../types/contract'
 
-export type Item = {
-  id: number
-  code: string
-  description: string
-  category: string
-  unit: string
-  signedPrice: number
-  requestedQuantity: number
-}
-
-export type Contract = {
-  id: string
-  name: string
-  uf: string
-  institution: string
-  items: Item[]
-  category: string
-  price: number
-  signedAt: string
-  due: string
-}
-
-const columnHelper = createColumnHelper<Contract>()
+const columnHelper = createColumnHelper<IContract>()
 const defaultColumns = [
   columnHelper.accessor('id', {
     header: 'Id',
     cell: (value) => value.getValue(),
   }),
-  columnHelper.accessor('category', {
-    header: 'Categoria',
-    cell: (value) => value.getValue(),
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-    },
+  columnHelper.accessor('categories', {
+    header: 'Categorias',
+    cell: (value) => value.getValue().join(', '),
+    filterFn: (row, columnId, value) => row.original['categories'].some((category) => category.includes(value)),
   }),
   columnHelper.accessor('name', {
     header: 'Nome',
     cell: (value) => value.getValue(),
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-    },
   }),
   columnHelper.accessor('uf', {
     header: 'UF',
     cell: (value) => value.getValue(),
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-      inputType: 'select:normal:uf',
-    },
   }),
   columnHelper.accessor('institution', {
     header: 'Instituição',
     cell: (value) => value.getValue(),
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-      inputType: 'select:creatable:institution',
-    },
   }),
   columnHelper.accessor('items', {
     header: 'Itens',
-    cell: (value) => value.getValue(),
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-      //inputType: 'select:creatable:itemDescription', TODO
-    },
+    cell: (value) =>
+      value
+        .getValue()
+        .map((item) => item.code)
+        .join(', '),
+    filterFn: (row, columnId, value) => row.original['items'].some((item) => item.code.includes(value)),
   }),
-  columnHelper.accessor('price', {
-    header: 'Preço',
-    cell: (value) => <span>R$ {value.getValue()}</span>,
-    meta: {
-      isEditable: true,
-      isCreatable: true,
-      inputType: 'price',
-    },
+  columnHelper.accessor('totalPrice', {
+    header: 'Preço total',
+    cell: (value) => <span>R$ {value.getValue().toFixed(2)}</span>,
   }),
-  columnHelper.accessor('signedAt', {
+  columnHelper.accessor('signedDate', {
     header: 'Assinado',
     cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
     meta: {
-      isEditable: true,
-      isCreatable: true,
       inputType: 'date',
     },
+    filterFn: (row, columnId, value) =>
+      moment(row.original['signedDate']).format('yyyy-MM-DD') === moment(value).format('yyyy-MM-DD'),
   }),
-  columnHelper.accessor('due', {
+  columnHelper.accessor('dueDate', {
     header: 'Vencimento',
     cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
     meta: {
-      isEditable: true,
-      isCreatable: true,
       inputType: 'date',
     },
+    filterFn: (row, columnId, value) =>
+      moment(row.original['dueDate']).format('yyyy-MM-DD') === moment(value).format('yyyy-MM-DD'),
   }),
 ]
 
 export default function Contracts() {
   const api = 'http://localhost:3000/api/contracts'
-  const [contracts, setContracts] = useState<Contract[]>([])
+  const [contracts, setContracts] = useState<IContract[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
     fetch(api)
       .then((res) => res.json())
-      .then((data) => setContracts(data.contracts as Contract[]))
+      .then(({ contracts }) => {
+        contracts = contracts.map((contract: IContract) => {
+          const parsedContract = ContractSchema.safeParse(contract)
+          if (parsedContract.success) return parsedContract.data
+        })
+        setContracts(contracts)
+      })
   }, [])
 
   return (

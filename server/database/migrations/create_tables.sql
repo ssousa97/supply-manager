@@ -17,6 +17,7 @@ create table if not exists item(
 create table if not exists contract(
   id uuid primary key default gen_random_uuid(),
   name varchar(255) not null unique,
+  uf varchar(2) not null,
   signed_date date not null,
   due_date date not null,
   total_price decimal not null,
@@ -45,15 +46,15 @@ create table if not exists "order"(
   portal varchar(255) not null,
   due_date date not null,
   trade varchar(255) not null,
-  receipt varchar(255) not null,
+  receipt varchar(255),
   uf varchar(2) not null,
   price decimal not null,
   dispatch_date date,
   delivery_date date,
-  shipping int not null,
-  shipping_fee decimal not null,
+  shipping varchar(255),
+  shipping_fee decimal,
   postal_code varchar(255) not null,
-  status int not null,  
+  status varchar(255),  
   institution_id uuid not null references institution(id),
   contract_id uuid references contract(id)
 );
@@ -69,6 +70,6 @@ create table if not exists order_item(
   requested_batch_quantity int not null,
   amount_per_batch int not null,
   description text,
-  item_id uuid not null references item_code(id),
+  item_id uuid not null references item(id),
   order_id uuid not null references "order"(id)
 );

@@ -34,10 +34,10 @@ begin
       cast(newOrder->>'price' as numeric),
       cast(newOrder->>'dispatchDate' as date),
       cast(newOrder->>'deliveryDate' as date),
-      cast(newOrder->>'shipping' as int),
+      newOrder->>'shipping',
       cast(newOrder->>'shippingFee' as numeric),
       newOrder->>'postalCode',
-      cast(newOrder->>'status' as int),
+      newOrder->>'status',
       orderInstitutionId,
       orderContractId
     ) returning id into orderId;
@@ -54,10 +54,10 @@ begin
       price = cast(newOrder->>'price' as numeric),
       dispatch_date = cast(newOrder->>'dispatchDate' as date),
       delivery_date = cast(newOrder->>'deliveryDate' as date),
-      shipping = cast(newOrder->>'shipping' as int),
+      shipping = newOrder->>'shipping',
       shipping_fee = cast(newOrder->>'shippingFee' as numeric),
       postal_code = newOrder->>'postalCode',
-      status = cast(newOrder->>'status' as int),
+      status = newOrder->>'status',
       institution_id = orderInstitutionId,
       contract_id = orderContractId
     where 

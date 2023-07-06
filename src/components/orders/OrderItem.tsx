@@ -1,25 +1,23 @@
 import { Dispatch } from 'react'
-import { Item } from './Contracts'
 import Input from '../common/Input'
+import { IOrderItem } from '../../../types/item'
 import Select from '../common/Select'
 
 type ItemsProps = {
-  items: Item[]
+  items: IOrderItem[]
   dispatch: Dispatch<any>
 }
-export default function Items({ items, dispatch }: ItemsProps) {
+export default function OrderItem({ items, dispatch }: ItemsProps) {
   return (
     <ul className="flex-1 overflow-auto">
       {items?.map((item, index) => (
         <li
           key={index}
-          className="my-3 flex items-center">
-          <div className="collapse-arrow collapse bg-base-200">
+          className="my-3 flex items-center rounded-lg">
+          <div className="collapse-arrow collapse bg-accent">
             <input type="checkbox" />
-            <div className="collapse-title text-lg font-medium">
-              {item.description}
-            </div>
-            <div className="collapse-content m-2 rounded-lg">
+            <div className="collapse-title text-sm font-medium">{item.description}</div>
+            <div className="collapse-content rounded-lg">
               <div className="flex gap-2">
                 <div className="flex flex-[2] flex-col">
                   <label htmlFor="description">Descrição</label>
@@ -37,74 +35,67 @@ export default function Items({ items, dispatch }: ItemsProps) {
                 </div>
                 <div className="flex flex-1 flex-col">
                   <label htmlFor="description">Código</label>
-                  <input
-                    type="text"
-                    className="input input-sm"
-                    value={item.code}
-                    onChange={(e) =>
-                      dispatch({
-                        type: 'itemCode',
-                        payload: { index, code: e.target.value },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex flex-1 flex-col">
-                  <label htmlFor="description">Categoria</label>
                   <Select
-                    optionType="category"
-                    value={item.category}
+                    initialValue={item.code}
+                    onSelect={(val) => dispatch({ type: 'itemCode', payload: { index, code: val } })}
+                    optionType="itemsCodes"
                     className="input-sm"
-                    onChange={(val) =>
-                      dispatch({
-                        type: 'itemCategory',
-                        payload: { index, category: val },
-                      })
-                    }
                   />
                 </div>
               </div>
               <div className="divider"></div>
-              <div className="flex w-[50%] gap-2">
+              <div className="flex gap-2">
                 <div className="flex flex-1 flex-col">
-                  <label htmlFor="description">Unidade</label>
-                  <input
-                    type="text"
-                    className="input input-sm"
-                    value={item.unit}
-                    onChange={(e) =>
-                      dispatch({
-                        type: 'itemUnit',
-                        payload: { index, unit: e.target.value },
-                      })
-                    }
-                  />
-                </div>
-                <div className="flex flex-1 flex-col">
-                  <label htmlFor="description">Quantidade solicitada</label>
+                  <label
+                    htmlFor="description"
+                    className="text-sm">
+                    Total de unidades solicitadas
+                  </label>
                   <input
                     type="number"
                     min={0}
                     className="input input-sm"
-                    value={item.requestedQuantity}
+                    value={item.requestedBatchQuantity}
                     onChange={(e) =>
                       dispatch({
-                        type: 'itemRequestedQuantity',
-                        payload: { index, quantity: e.target.value },
+                        type: 'itemTotalRequestedBatchQuantity',
+                        payload: { index, totalRequestedBatchQuantity: e.target.value },
                       })
                     }
                   />
                 </div>
                 <div className="flex flex-1 flex-col">
-                  <label htmlFor="signedPrice">Preço contratado</label>
+                  <label
+                    htmlFor="description"
+                    className="text-sm">
+                    Quantidade por unidade
+                  </label>
+                  <input
+                    type="text"
+                    className="input input-sm"
+                    value={item.amountPerBatch}
+                    onChange={(e) =>
+                      dispatch({
+                        type: 'itemAmountPerBatch',
+                        payload: { index, amountPerBatch: e.target.value },
+                      })
+                    }
+                  />
+                </div>
+                <div className="flex flex-1 flex-col">
+                  <label
+                    htmlFor="signedPrice"
+                    className="text-sm">
+                    Preço contratado por unidade
+                  </label>
                   <Input
                     type="price"
                     className="input-sm"
-                    value={item.signedPrice}
+                    value={item.signedPricePerBatch}
                     onChange={(val) =>
                       dispatch({
-                        type: 'itemSignedPrice',
-                        payload: { index, price: val },
+                        type: 'itemSignedPricePerBatch',
+                        payload: { index, signedPricePerBatch: val },
                       })
                     }
                   />
@@ -113,9 +104,7 @@ export default function Items({ items, dispatch }: ItemsProps) {
               <div className="mt-5 flex justify-end">
                 <button
                   className="btn-error btn-sm btn"
-                  onClick={() =>
-                    dispatch({ type: 'removeItem', payload: index })
-                  }>
+                  onClick={() => dispatch({ type: 'removeItem', payload: index })}>
                   Remover
                 </button>
               </div>

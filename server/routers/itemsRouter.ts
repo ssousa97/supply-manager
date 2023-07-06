@@ -11,6 +11,13 @@ itemsRouter.get('/', async (req: Request, res: Response) => {
   })
 })
 
+itemsRouter.get('/codes', async (req: Request, res: Response) => {
+  const codes = await db.any('select code from item')
+  res.json({
+    codes,
+  })
+})
+
 itemsRouter.post('/upsert', async (req: Request, res: Response) => {
   const { item } = req.body
 
