@@ -1,10 +1,10 @@
 create or replace function upsert_contract(newContract json) returns void as $$
-  declare contractId uuid;
+  declare contractId integer;
   declare contractItem json;
-  declare contractItemId uuid;
-  declare contractCategoryId uuid;
+  declare contractItemId integer;
+  declare contractCategoryId integer;
   declare contractCategoryName varchar;
-  declare contractInstitutionId uuid;
+  declare contractInstitutionId integer;
 begin
 
   select id into contractInstitutionId from institution where name = newContract->>'institution';
@@ -18,7 +18,8 @@ begin
       id = contractInstitutionId;
   end if;
 
-  if newContract->>'id' is null then
+  select id into contractId from contract where name = newContract->>'name' or id = cast(newContract->>'id' as integer);
+  if contractId is null then
     insert into contract(name, uf, signed_date, due_date, total_price, institution_id)  
       values(
         newContract->>'name', 
@@ -38,7 +39,7 @@ begin
       total_price = cast(newContract->>'totalPrice' as numeric),
       institution_id = contractInstitutionId
     where 
-      id = cast(newContract->>'id' as uuid)
+      id = cast(newContract->>'id' as integer)
     returning id into contractId;
   end if;
 

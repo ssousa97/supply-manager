@@ -1,5 +1,6 @@
 import express, { Request, Response } from 'express'
 import { db } from '../database/init'
+import { ItemSchema } from '../../types/item'
 
 const itemsRouter = express.Router()
 
@@ -18,18 +19,34 @@ itemsRouter.get('/codes', async (req: Request, res: Response) => {
   })
 })
 
-itemsRouter.post('/upsert', async (req: Request, res: Response) => {
-  const { item } = req.body
+itemsRouter.get('/:id', async (req: Request, res: Response) => {
+  const { id } = req.params
 
-  try {
-    await db.func('upsert_item', [item])
+  const item = await db.one('select id, code, quantity_on_stock as "quantityOnStock" from item where id = $1', [id])
+
+  res.json({
+    item,
+  })
+})
+
+itemsRouter.post('/upsert', async (req: Request, res: Response) => {
+  const item = req.body
+  const parseResult = ItemSchema.safeParse(item)
+
+  if (parseResult.success) {
+    try {
+      await db.func('upsert_item', [item])
+      res.json({ status: 'success', message: 'Item salvo com sucesso !' })
+    } catch (err) {
+      res.json({
+        status: 'error',
+        message: (err as any).message,
+      })
+    }
+  } else {
     res.json({
-      status: 'success',
-    })
-  } catch (err) {
-    res.json({
-      status: 'failed',
-      message: (err as any).message,
+      status: 'error',
+      message: parseResult.error.issues.map((issue) => `${issue.path[0]} - ${issue.message}`).join('\n'),
     })
   }
 })

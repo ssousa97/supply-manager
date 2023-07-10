@@ -2,7 +2,7 @@ import { z } from 'zod'
 import { ContractItemSchema } from './item'
 
 export const ContractSchema = z.object({
-  id: z.string().uuid().optional(),
+  id: z.coerce.number().optional(),
   name: z.string().min(1, { message: 'Você deve incluir o nome do contrato.' }),
   uf: z.string().min(2, { message: 'Selecione a UF.' }).max(2, { message: 'Selecione a UF.' }),
   signedDate: z.coerce.date(),

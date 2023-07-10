@@ -1,13 +1,13 @@
 import { Dispatch } from 'react'
-import Input from '../common/Input'
+import PriceInput from '../common/forms/PriceInput'
 import { IOrderItem } from '../../../types/item'
-import Select from '../common/Select'
+import Select from '../common/forms/Select'
 
 type ItemsProps = {
   items: IOrderItem[]
   dispatch: Dispatch<any>
 }
-export default function OrderItem({ items, dispatch }: ItemsProps) {
+export default function OrderItems({ items, dispatch }: ItemsProps) {
   return (
     <ul className="flex-1 overflow-auto">
       {items?.map((item, index) => (
@@ -58,8 +58,8 @@ export default function OrderItem({ items, dispatch }: ItemsProps) {
                     value={item.requestedBatchQuantity}
                     onChange={(e) =>
                       dispatch({
-                        type: 'itemTotalRequestedBatchQuantity',
-                        payload: { index, totalRequestedBatchQuantity: e.target.value },
+                        type: 'itemRequestedBatchQuantity',
+                        payload: { index, requestedBatchQuantity: e.target.value },
                       })
                     }
                   />
@@ -88,8 +88,7 @@ export default function OrderItem({ items, dispatch }: ItemsProps) {
                     className="text-sm">
                     Preço contratado por unidade
                   </label>
-                  <Input
-                    type="price"
+                  <PriceInput
                     className="input-sm"
                     value={item.signedPricePerBatch}
                     onChange={(val) =>

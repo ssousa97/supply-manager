@@ -3,8 +3,6 @@ import fs from 'fs/promises'
 
 const dbInitializer = pgPromise()
 
-export let queries: { [queryName: string]: string } = {}
-
 export const db = dbInitializer({
   host: process.env.PGHOST,
   port: parseInt(process.env.PGPORT ?? '5432'),
@@ -33,15 +31,4 @@ export async function setupMigrations() {
   } catch (err) {
     console.log(err)
   }
-}
-
-export async function loadQueries() {
-  const queriesFiles = await fs.readdir('./server/database/queries/')
-  const queriesContent = queriesFiles.map(async (file) => {
-    const [queryName] = file.split('.')
-    const query = await fs.readFile('./server/database/queries/' + file, { encoding: 'utf-8' })
-    return { [queryName]: query }
-  })
-
-  queries = (await Promise.all(queriesContent)).reduce((obj, item) => ({ ...obj, ...item }), {})
 }

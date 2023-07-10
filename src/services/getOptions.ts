@@ -50,6 +50,21 @@ export async function getOptions(optionType: string) {
       return { label: code.code, value: code.code }
     })
   }
+
+  if (optionType === 'contracts') {
+    const { contractNames } = await fetch('http://localhost:3000/api/contracts/names').then((res) => res.json())
+    return contractNames.map((contract: any) => {
+      return { label: contract.name, value: contract.name }
+    })
+  }
+
+  if (optionType === 'shipping') {
+    return [
+      { label: 'PAC', value: 'PAC' },
+      { label: 'CARRO', value: 'CARRO' },
+      { label: 'SEDEX', value: 'SEDEX' },
+    ]
+  }
   return []
 }
 

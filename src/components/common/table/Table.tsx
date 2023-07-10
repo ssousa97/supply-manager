@@ -8,7 +8,7 @@ import {
   getFilteredRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, ReactNode, SetStateAction, useState } from 'react'
 import { TableContext } from './TableContext'
 import TableControls from './TableControls'
 import TableData from './TableData'
@@ -29,13 +29,20 @@ declare module '@tanstack/table-core' {
 export type TableProps<T> = {
   data: T[]
   columns: ColumnDef<T, any>[]
-  api: string
   model: string
+  actions?: ReactNode
   initialColumnVisibility: Record<string, boolean>
   setTableData: Dispatch<SetStateAction<T[]>>
 }
 
-export default function Table<T>({ data, columns, api, model, initialColumnVisibility, setTableData }: TableProps<T>) {
+export default function Table<T>({
+  data,
+  columns,
+  model,
+  actions,
+  initialColumnVisibility,
+  setTableData,
+}: TableProps<T>) {
   const [columnVisibility, setColumnVisibility] = useState(initialColumnVisibility ?? {})
   const [globalFilter, setGlobalFilter] = useState('')
   const [rowSelection, setRowSelection] = useState({})
@@ -68,9 +75,9 @@ export default function Table<T>({ data, columns, api, model, initialColumnVisib
     <TableContext.Provider
       value={{
         table,
-        api,
         model,
         globalFilter,
+        actions,
         setGlobalFilter,
         setTableData,
       }}>

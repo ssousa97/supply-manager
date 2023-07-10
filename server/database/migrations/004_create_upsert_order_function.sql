@@ -1,11 +1,11 @@
 create or replace function upsert_order(newOrder json) returns void as $$
-  declare orderId uuid;
+  declare orderId integer;
   declare orderItem json;
-  declare orderItemId uuid;
-  declare orderCategoryId uuid;
+  declare orderItemId integer;
+  declare orderCategoryId integer;
   declare orderCategoryName varchar;
-  declare orderInstitutionId uuid;
-  declare orderContractId uuid;
+  declare orderInstitutionId integer;
+  declare orderContractId integer;
 begin
 
   select id into orderInstitutionId from institution where name = newOrder->>'institution';
@@ -19,8 +19,9 @@ begin
       id = orderInstitutionId;
   end if; 
 
-  select id into orderContractId from contract where name = newOrder->>'contract';
-  if newOrder->>'id' is null then
+  select id into orderContractId from contract where name = newOrder->>'contractName';
+  select id into orderId from "order" where name = newOrder->>'name' or id = cast(newOrder->>'id' as integer);
+  if orderId is null then
     insert into "order"(name, check_in_date, portal, due_date, trade, receipt, uf, price, dispatch_date, delivery_date, 
                         shipping, shipping_fee, postal_code, status, institution_id, contract_id)
     values(
@@ -42,7 +43,7 @@ begin
       orderContractId
     ) returning id into orderId;
   else 
-    update item
+    update "order"
     set 
       name = newOrder->>'name',
       check_in_date = cast(newOrder->>'checkInDate' as date),
@@ -61,7 +62,7 @@ begin
       institution_id = orderInstitutionId,
       contract_id = orderContractId
     where 
-      orderId = cast(newOrder->>'id' as uuid)
+      orderId = cast(newOrder->>'id' as integer)
     returning id into orderId;
   end if;
 

@@ -3,6 +3,7 @@ import Table from '../common/table/Table'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 import { ContractSchema, IContract } from '../../../types/contract'
+import ContractActions from './ContractActions'
 
 const columnHelper = createColumnHelper<IContract>()
 const defaultColumns = [
@@ -60,7 +61,7 @@ const defaultColumns = [
   }),
 ]
 
-export default function Contracts() {
+export default function ContractsTable() {
   const api = 'http://localhost:3000/api/contracts'
   const [contracts, setContracts] = useState<IContract[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
@@ -72,6 +73,7 @@ export default function Contracts() {
         contracts = contracts.map((contract: IContract) => {
           const parsedContract = ContractSchema.safeParse(contract)
           if (parsedContract.success) return parsedContract.data
+          else console.log(parsedContract.error)
         })
         setContracts(contracts)
       })
@@ -82,9 +84,9 @@ export default function Contracts() {
       model="contract"
       data={contracts}
       setTableData={setContracts}
-      api={api}
       columns={columns}
       initialColumnVisibility={{ id: false }}
+      actions={<ContractActions />}
     />
   )
 }

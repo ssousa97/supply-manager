@@ -1,7 +1,7 @@
 import * as Dropdown from '@radix-ui/react-dropdown-menu'
 import { FaCaretDown } from 'react-icons/fa'
 import { useTableContext } from './TableContext'
-import Input from '../Input'
+import PriceInput from '../PriceInput'
 import IntlCurrencyInput from 'react-intl-currency-input'
 
 export default function TableFilter() {

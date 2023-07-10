@@ -1,5 +1,5 @@
 import CreatableSelect from 'react-select/creatable'
-import { getOptions, makeOption } from '../../services/getOptions'
+import { getOptions, makeOption } from '../../../services/getOptions'
 import { useState, useEffect } from 'react'
 
 type Option = {

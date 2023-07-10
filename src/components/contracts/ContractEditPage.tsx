@@ -1,8 +1,8 @@
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useReducer, useRef } from 'react'
-import Select from '../common/Select'
+import Select from '../common/forms/Select'
 import { IContract } from '../../../types/contract'
-import MultiSelect from '../common/MultiSelect'
+import MultiSelect from '../common/forms/MultiSelect'
 import moment from 'moment'
 import ContractItems from './ContractItems'
 import { IContractItem } from '../../../types/item'
@@ -81,10 +81,11 @@ function reducer(state: IContract, action: any): IContract {
   return { ...state }
 }
 
-export default function Contract() {
+export default function ContractEditPage() {
   const { id } = useParams()
   const [contract, dispatch] = useReducer(reducer, newContract)
   const itemDescriptionRef = useRef<HTMLInputElement | null>(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
     if (id === 'new') return
@@ -202,9 +203,13 @@ export default function Contract() {
                 },
                 body: JSON.stringify(contract),
               }).then((res) => res.json())
-              result.status !== 'success'
-                ? toast.error(<b>{result.message}</b>, { duration: 5000 })
-                : toast.success('Contrato salvo com sucesso')
+              if (result.status !== 'success') {
+                toast.error(<b>{result.message}</b>, { duration: 5000 })
+                return
+              } else {
+                toast.success('Contrato salvo com sucesso')
+                navigate('/contracts')
+              }
             }}>
             Salvar
           </button>

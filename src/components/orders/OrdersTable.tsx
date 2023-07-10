@@ -3,6 +3,7 @@ import moment from 'moment'
 import { useState, useEffect } from 'react'
 import Table from '../common/table/Table'
 import { OrderSchema, IOrder } from '../../../types/order'
+import OrderActions from './OrderActions'
 
 const columnHelper = createColumnHelper<IOrder>()
 const defaultColumns = [
@@ -72,31 +73,32 @@ const defaultColumns = [
   }),
   columnHelper.accessor('status', {
     header: 'Status',
-    cell: (value) => value.getValue(),
+    cell: (value) => (value ? value.getValue() : ''),
   }),
   columnHelper.accessor('dispatchDate', {
     header: 'Data de envio',
-    cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
+    cell: (value) => (value.getValue() ? moment(value.getValue()).format('DD/MM/YYYY') : ''),
   }),
   columnHelper.accessor('deliveryDate', {
     header: 'Data de chegada',
-    cell: (value) => moment(value.getValue()).format('DD/MM/YYYY'),
+    cell: (value) => (value.getValue() ? moment(value.getValue()).format('DD/MM/YYYY') : ''),
   }),
 ]
 
-export default function Orders() {
+export default function OrdersTable() {
   const api = 'http://localhost:3000/api/orders'
   const [orders, setOrders] = useState<IOrder[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
-    fetch('http://localhost:3000/api/orders')
+    fetch(api)
       .then((res) => res.json())
       .then(({ orders }) => {
         orders = orders.map((order: IOrder) => {
           const parsedOrder = OrderSchema.safeParse(order)
           if (parsedOrder.success) return parsedOrder.data
         })
+
         setOrders(orders)
       })
   }, [])
@@ -107,8 +109,8 @@ export default function Orders() {
       data={orders}
       setTableData={setOrders}
       columns={columns}
-      api={api}
       initialColumnVisibility={{ id: false, code: false }}
+      actions={<OrderActions />}
     />
   )
 }

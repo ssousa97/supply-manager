@@ -3,15 +3,16 @@ import ReactDOM from 'react-dom/client'
 import App from './App.tsx'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import ErrorPage from './ErrorPage.tsx'
-import Contracts from './components/contracts/Contracts.tsx'
-import Orders from './components/orders/Orders.tsx'
-import Items from './components/items/Items.tsx'
+import ContractsTable from './components/contracts/ContractsTable.tsx'
+import OrdersTable from './components/orders/OrdersTable.tsx'
+import ItemsTable from './components/items/ItemsTable.tsx'
 import Finance from './components/finance/Finance.tsx'
 import Config from './components/config/Config.tsx'
-import Contract from './components/contracts/Contract.tsx'
-import Order from './components/orders/Order.tsx'
+import ContractEditPage from './components/contracts/ContractEditPage.tsx'
+import OrderEditPage from './components/orders/OrderEditPage.tsx'
 import './index.css'
 import Dashboard from './components/dashboard/Dashboard.tsx'
+import ItemEditDialog from './components/items/ItemEditDialog.tsx'
 
 const routes = {
   path: '/',
@@ -24,23 +25,27 @@ const routes = {
     },
     {
       path: 'contracts',
-      element: <Contracts />,
+      element: <ContractsTable />,
     },
     {
       path: 'contract/:id',
-      element: <Contract />,
+      element: <ContractEditPage />,
     },
     {
       path: 'orders',
-      element: <Orders />,
+      element: <OrdersTable />,
     },
     {
       path: 'order/:id',
-      element: <Order />,
+      element: <OrderEditPage />,
     },
     {
       path: 'items',
-      element: <Items />,
+      element: <ItemsTable />,
+    },
+    {
+      path: 'item/:id',
+      element: <ItemEditDialog />,
     },
     {
       path: 'finance',

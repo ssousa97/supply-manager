@@ -1,7 +1,7 @@
 import { Dispatch } from 'react'
-import Input from '../common/Input'
+import PriceInput from '../common/forms/PriceInput'
 import { IContractItem } from '../../../types/item'
-import Select from '../common/Select'
+import Select from '../common/forms/Select'
 
 type ItemsProps = {
   items: IContractItem[]
@@ -88,8 +88,7 @@ export default function ContractItems({ items, dispatch }: ItemsProps) {
                     className="text-sm">
                     Preço contratado por unidade
                   </label>
-                  <Input
-                    type="price"
+                  <PriceInput
                     className="input-sm"
                     value={item.signedPricePerBatch}
                     onChange={(val) =>
