@@ -1,6 +1,8 @@
 import express, { Request, Response } from 'express'
 import { db } from '../database/init'
 import { ItemSchema } from '../../types/item'
+import { item_add_inflow } from '../database/queries/item_add_inflow'
+import { item_add_outflow } from '../database/queries/item_add_outflow'
 
 const itemsRouter = express.Router()
 
@@ -27,6 +29,48 @@ itemsRouter.get('/:id', async (req: Request, res: Response) => {
   res.json({
     item,
   })
+})
+
+itemsRouter.post('/inflow', async (req: Request, res: Response) => {
+  const inflowItem = req.body
+
+  try {
+    await db.none(item_add_inflow, [inflowItem.inflow, inflowItem.code])
+    res.json({
+      status: 'success',
+      message: 'Entrada de item salva com sucesso',
+    })
+  } catch (err) {
+    res.json({
+      status: 'error',
+      message: (err as any).message,
+    })
+  }
+})
+
+itemsRouter.post('/outflow', async (req: Request, res: Response) => {
+  const outflowItem = req.body
+
+  if (outflowItem.quantityOnStock - outflowItem.outflow < 0) {
+    res.json({
+      status: 'error',
+      message: 'Falha ao adicionar saída. Não há item no estoque !',
+    })
+    return
+  }
+
+  try {
+    await db.none(item_add_outflow, [outflowItem.outflow, outflowItem.code])
+    res.json({
+      status: 'success',
+      message: 'Saída de item salva com sucesso',
+    })
+  } catch (err) {
+    res.json({
+      status: 'error',
+      message: (err as any).message,
+    })
+  }
 })
 
 itemsRouter.post('/upsert', async (req: Request, res: Response) => {
