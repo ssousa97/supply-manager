@@ -29,6 +29,6 @@ export async function setupMigrations() {
         await db.none('INSERT INTO migrations (name) VALUES ($<migrationName>)', { migrationName })
       })
   } catch (err) {
-    console.log(err)
+    console.log((err as any).msg)
   }
 }

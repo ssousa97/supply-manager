@@ -52,7 +52,6 @@ create table if not exists "order"(
   dispatch_date date,
   delivery_date date,
   shipping varchar(255),
-  shipping_fee decimal,
   postal_code varchar(255) not null,
   status varchar(255),  
   institution_id integer not null references institution(id),
@@ -72,4 +71,19 @@ create table if not exists order_item(
   description text,
   item_id integer not null references item(id),
   order_id integer not null references "order"(id)
+);
+
+create table if not exists inflows(
+  id serial primary key,
+  "date" date not null,
+  quantity integer not null,
+  item_id integer not null references item(id)
+);
+
+create table if not exists outflows(
+  id serial primary key,
+  "date" date not null,
+  quantity integer not null,
+  item_id integer not null references item(id),
+  order_id integer references "order"(id)
 );

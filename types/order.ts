@@ -1,4 +1,4 @@
-import { OrderItemSchema } from './item'
+import { OrderItemSchema, OutflowSchema } from './item'
 import { z } from 'zod'
 
 export const OrderSchema = z.object({
@@ -23,4 +23,12 @@ export const OrderSchema = z.object({
   items: z.array(OrderItemSchema).min(1, { message: 'Você deve incluir ao menos um item.' }),
 })
 
+export const DispatchOrderSchema = z.object({
+  id: z.coerce.number(),
+  shipping: z.coerce.string(),
+  shippingFee: z.coerce.number(),
+  outflowItems: z.array(OutflowSchema),
+})
+
 export type IOrder = z.infer<typeof OrderSchema>
+export type IDispatchOrder = z.infer<typeof DispatchOrderSchema>

@@ -23,7 +23,7 @@ begin
   select id into orderId from "order" where name = newOrder->>'name' or id = cast(newOrder->>'id' as integer);
   if orderId is null then
     insert into "order"(name, check_in_date, portal, due_date, trade, receipt, uf, price, dispatch_date, delivery_date, 
-                        shipping, shipping_fee, postal_code, status, institution_id, contract_id)
+                        shipping, postal_code, status, institution_id, contract_id)
     values(
       newOrder->>'name',
       cast(newOrder->>'checkInDate' as date),
@@ -36,7 +36,6 @@ begin
       cast(newOrder->>'dispatchDate' as date),
       cast(newOrder->>'deliveryDate' as date),
       newOrder->>'shipping',
-      cast(newOrder->>'shippingFee' as numeric),
       newOrder->>'postalCode',
       newOrder->>'status',
       orderInstitutionId,
@@ -56,7 +55,6 @@ begin
       dispatch_date = cast(newOrder->>'dispatchDate' as date),
       delivery_date = cast(newOrder->>'deliveryDate' as date),
       shipping = newOrder->>'shipping',
-      shipping_fee = cast(newOrder->>'shippingFee' as numeric),
       postal_code = newOrder->>'postalCode',
       status = newOrder->>'status',
       institution_id = orderInstitutionId,

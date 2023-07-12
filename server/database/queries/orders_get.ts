@@ -12,7 +12,6 @@ export const orders_get = `
     o.dispatch_date as "dispatchDate",
     o.delivery_date as "deliveryDate",
     o.shipping,
-    o.shipping_fee as "shippingFee",
     o.postal_code as "postalCode",
     o.status,
     i.name as "institution",
