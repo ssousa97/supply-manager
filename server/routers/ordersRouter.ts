@@ -36,7 +36,7 @@ ordersRouter.post('/upsert', async (req: Request, res: Response) => {
     await db.any(orders_upsert, [order])
     res.json({
       status: 'success',
-      message: 'Empenho criado com sucesso!',
+      message: 'Empenho salvo com sucesso!',
     })
   } catch (err) {
     res.json({

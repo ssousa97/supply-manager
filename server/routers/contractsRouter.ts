@@ -42,7 +42,7 @@ contractsRouter.post('/upsert', async (req: Request, res: Response) => {
     await db.any(contracts_upsert, [contract])
     res.json({
       status: 'success',
-      message: 'Contrato criado com sucesso!',
+      message: 'Contrato salvo com sucesso!',
     })
   } catch (err) {
     res.json({
