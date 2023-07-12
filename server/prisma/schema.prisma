@@ -1,0 +1,137 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator kysely {
+  provider = "prisma-kysely"
+
+  output    = "../../types"
+  fileName  = "databaseTypes.ts"
+  camelCase = true
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id        Int                @id @default(autoincrement())
+  name      String             @unique
+  contracts ContractCategory[]
+  orders    OrderCategory[]
+}
+
+model Institution {
+  id        Int        @id @default(autoincrement())
+  name      String     @unique
+  contracts Contract[]
+  orders    Order[]
+}
+
+model Item {
+  id              Int            @id @default(autoincrement())
+  code            String         @unique
+  quantityOnStock Int            @default(0)
+  contractItems   ContractItem[]
+  orderItems      OrderItem[]
+  inflows         Inflow[]
+  outflows        Outflow[]
+}
+
+model Contract {
+  id            Int                @id @default(autoincrement())
+  name          String             @unique
+  uf            String
+  signedDate    DateTime
+  dueDate       DateTime
+  totalPrice    Decimal            @db.Money
+  institutionId Int
+  institution   Institution        @relation(fields: [institutionId], references: [id])
+  categories    ContractCategory[]
+  orders        Order[]
+  items         ContractItem[]
+}
+
+model ContractItem {
+  id                          Int      @id @default(autoincrement())
+  signedPricePerBatch         Decimal  @db.Money
+  amountPerBatch              Int
+  totalRequestedBatchQuantity Int
+  description                 String
+  itemId                      Int
+  item                        Item     @relation(fields: [itemId], references: [id])
+  contractId                  Int
+  contract                    Contract @relation(fields: [contractId], references: [id])
+}
+
+model ContractCategory {
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  contractId Int
+  contract   Contract @relation(fields: [contractId], references: [id])
+
+  @@id([categoryId, contractId])
+}
+
+model Order {
+  id            Int             @id @default(autoincrement())
+  name          String          @unique
+  checkInDate   DateTime
+  dueDate       DateTime
+  portal        String
+  trade         String
+  uf            String
+  postalCode    String
+  status        String
+  price         Decimal         @db.Money
+  receipt       String?
+  dispatchDate  DateTime?
+  deliveryDate  DateTime?
+  shipping      String?
+  categories    OrderCategory[]
+  items         OrderItem[]
+  outflow       Outflow?
+  institutionId Int
+  institution   Institution     @relation(fields: [institutionId], references: [id])
+  contractId    Int?
+  contract      Contract?       @relation(fields: [contractId], references: [id])
+}
+
+model OrderItem {
+  id                     Int     @id @default(autoincrement())
+  signedPricePerBatch    Decimal @db.Money
+  amountPerBatch         Int
+  requestedBatchQuantity Int
+  description            String
+  itemId                 Int
+  item                   Item    @relation(fields: [itemId], references: [id])
+  orderId                Int
+  order                  Order   @relation(fields: [orderId], references: [id])
+}
+
+model OrderCategory {
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+  orderId    Int
+  order      Order    @relation(fields: [orderId], references: [id])
+
+  @@id([categoryId, orderId])
+}
+
+model Inflow {
+  id       Int      @id @default(autoincrement())
+  date     DateTime @default(now())
+  quantity Int
+  itemId   Int
+  item     Item     @relation(fields: [itemId], references: [id])
+}
+
+model Outflow {
+  id       Int      @id @default(autoincrement())
+  date     DateTime @default(now())
+  quantity Int
+  itemId   Int
+  item     Item     @relation(fields: [itemId], references: [id])
+  orderId  Int?     @unique
+  order    Order?   @relation(fields: [orderId], references: [id])
+}

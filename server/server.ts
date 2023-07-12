@@ -5,12 +5,9 @@ import contractsRouter from './routers/contractsRouter'
 import institutionsRouter from './routers/institutionsRouter'
 import categoriesRouter from './routers/categoriesRouter'
 import * as dotenv from 'dotenv'
-import { setupMigrations } from './database/init'
 
 dotenv.config()
 const app = express()
-
-setupMigrations()
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

@@ -2,10 +2,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
 import Table from '../common/table/Table'
-import { OrderSchema, IOrder } from '../../../types/order'
+import { OrderSchema, Order } from '../../../types/order'
 import OrderActions from './OrderActions'
 
-const columnHelper = createColumnHelper<IOrder>()
+const columnHelper = createColumnHelper<Order>()
 const defaultColumns = [
   columnHelper.accessor('id', {
     header: 'Id',
@@ -87,14 +87,14 @@ const defaultColumns = [
 
 export default function OrdersTable() {
   const api = 'http://localhost:3000/api/orders'
-  const [orders, setOrders] = useState<IOrder[]>([])
+  const [orders, setOrders] = useState<Order[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
     fetch(api)
       .then((res) => res.json())
       .then(({ orders }) => {
-        orders = orders.map((order: IOrder) => {
+        orders = orders.map((order: Order) => {
           const parsedOrder = OrderSchema.safeParse(order)
           if (parsedOrder.success) return parsedOrder.data
         })

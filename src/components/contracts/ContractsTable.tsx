@@ -2,10 +2,10 @@ import { createColumnHelper } from '@tanstack/react-table'
 import Table from '../common/table/Table'
 import moment from 'moment'
 import { useState, useEffect } from 'react'
-import { ContractSchema, IContract } from '../../../types/contract'
+import { ContractSchema, Contract } from '../../../types/contract'
 import ContractActions from './ContractActions'
 
-const columnHelper = createColumnHelper<IContract>()
+const columnHelper = createColumnHelper<Contract>()
 const defaultColumns = [
   columnHelper.accessor('id', {
     header: 'Id',
@@ -63,14 +63,14 @@ const defaultColumns = [
 
 export default function ContractsTable() {
   const api = 'http://localhost:3000/api/contracts'
-  const [contracts, setContracts] = useState<IContract[]>([])
+  const [contracts, setContracts] = useState<Contract[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
     fetch(api)
       .then((res) => res.json())
       .then(({ contracts }) => {
-        contracts = contracts.map((contract: IContract) => {
+        contracts = contracts.map((contract: Contract) => {
           const parsedContract = ContractSchema.safeParse(contract)
           if (parsedContract.success) return parsedContract.data
           else console.log(parsedContract.error)

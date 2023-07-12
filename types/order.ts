@@ -14,9 +14,8 @@ export const OrderSchema = z.object({
   dispatchDate: z.coerce.date().optional().nullable(),
   deliveryDate: z.coerce.date().optional().nullable(),
   shipping: z.coerce.string().optional().nullable(),
-  shippingFee: z.coerce.number().min(0).optional().nullable(),
   postalCode: z.string().min(1, { message: 'Você deve incluir o codigo postal.' }),
-  status: z.enum(['ENVIADO', 'ENTREGUE', 'AGUARDANDO ENVIO']),
+  status: z.enum(['ENVIADO', 'ENTREGUE', 'AGUARDANDO ENVIO']).default('AGUARDANDO ENVIO'),
   institution: z.string().min(1, { message: 'Você deve incluir a instituição.' }),
   contractName: z.coerce.string().optional(),
   categories: z.array(z.string()).min(1, { message: 'Você deve incluir ao menos uma categoria' }),
@@ -26,9 +25,8 @@ export const OrderSchema = z.object({
 export const DispatchOrderSchema = z.object({
   id: z.coerce.number(),
   shipping: z.coerce.string(),
-  shippingFee: z.coerce.number(),
   outflowItems: z.array(OutflowSchema),
 })
 
-export type IOrder = z.infer<typeof OrderSchema>
-export type IDispatchOrder = z.infer<typeof DispatchOrderSchema>
+export type Order = z.infer<typeof OrderSchema>
+export type DispatchOrder = z.infer<typeof DispatchOrderSchema>

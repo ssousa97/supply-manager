@@ -1,14 +1,14 @@
 import { useNavigate, useParams } from 'react-router-dom'
 import { useEffect, useReducer, useRef } from 'react'
 import Select from '../common/forms/Select'
-import { IContract } from '../../../types/contract'
+import { Contract } from '../../../types/contract'
 import MultiSelect from '../common/forms/MultiSelect'
 import moment from 'moment'
 import ContractItems from './ContractItems'
-import { IContractItem } from '../../../types/item'
+import { ContractItem } from '../../../types/item'
 import { toast } from 'react-hot-toast'
 
-const newContract: IContract = {
+const newContract: Contract = {
   name: '',
   uf: '',
   institution: '',
@@ -19,7 +19,7 @@ const newContract: IContract = {
   totalPrice: 0,
 }
 
-function reducer(state: IContract, action: any): IContract {
+function reducer(state: Contract, action: any): Contract {
   switch (action.type) {
     case 'set':
       return { ...action.payload }
@@ -65,7 +65,7 @@ function reducer(state: IContract, action: any): IContract {
       return { ...state, items: state.items.filter((_, i) => i !== action.payload) }
     }
     case 'addItem': {
-      const newItem: IContractItem = {
+      const newItem: ContractItem = {
         amountPerBatch: 0,
         code: '',
         description: action.payload,

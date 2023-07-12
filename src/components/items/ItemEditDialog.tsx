@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react'
-import { IItem } from '../../../types/item'
+import { Item } from '../../../types/item'
 import toast from 'react-hot-toast'
 import { useTableContext } from '../common/table/TableContext'
 
-const newItem: IItem = {
+const newItem: Item = {
   code: '',
   quantityOnStock: 0,
 }
 
 export default function ItemEditDialog() {
   const { table } = useTableContext()
-  const [item, setItem] = useState<IItem>(newItem)
+  const [item, setItem] = useState<Item>(newItem)
   const id = table.getSelectedRowModel().rows[0]?.original.id ?? 'new'
 
   useEffect(() => {

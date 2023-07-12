@@ -1,45 +1,53 @@
 import express, { Request, Response } from 'express'
-import { db } from '../database/init'
-import { contracts_get_all } from '../database/queries/contracts_get_all'
-import { ContractSchema, IContract } from '../../types/contract'
-import { contracts_get } from '../database/queries/contracts_get'
+import { db } from '../database'
+import { Contract, ContractSchema } from '../../types/contract'
+import { contracts_upsert } from '../database/contracts_upsert'
+import { contracts_get } from '../database/contracts_get'
 
 const contractsRouter = express.Router()
 
 contractsRouter.get('/', async (req: Request, res: Response) => {
-  const contracts = await db.any(contracts_get_all)
-  res.json({ contracts })
+  const contracts = await db.manyOrNone<Contract>('select * from "Contract"')
+  res.json({
+    contracts,
+  })
 })
 
 contractsRouter.get('/names', async (req: Request, res: Response) => {
-  const contractNames = await db.manyOrNone<string>('select name from contract')
-  res.json({ contractNames })
+  const contractsNames = await db.manyOrNone<Contract>('select name from "Contract"')
+  res.json({
+    contractsNames,
+  })
 })
 
 contractsRouter.get('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params
-  const contract = await db.oneOrNone<IContract>(contracts_get, [id])
-  res.json({ contract })
+  try {
+    const { id } = req.params
+    const contract = await db.oneOrNone<Contract>(contracts_get, [id])
+    res.json({
+      status: contract ? 'success' : 'notFound',
+      contract,
+    })
+  } catch (err) {
+    res.json({
+      status: 'error',
+      message: (err as Error).message,
+    })
+  }
 })
 
 contractsRouter.post('/upsert', async (req: Request, res: Response) => {
-  const contract = req.body
-  const parseResult = ContractSchema.safeParse(contract)
-
-  if (parseResult.success) {
-    try {
-      await db.func('upsert_contract', [contract])
-      res.json({ status: 'success', message: 'Contrato salvo com sucesso !' })
-    } catch (err) {
-      res.json({
-        status: 'error',
-        message: (err as any).message,
-      })
-    }
-  } else {
+  try {
+    const contract = ContractSchema.parse(req.body.contract)
+    await db.any(contracts_upsert, [contract])
+    res.json({
+      status: 'success',
+      message: 'Contrato criado com sucesso!',
+    })
+  } catch (err) {
     res.json({
       status: 'error',
-      message: parseResult.error.issues.map((issue) => `${issue.path[0]} - ${issue.message}`).join('\n'),
+      message: (err as Error).message,
     })
   }
 })

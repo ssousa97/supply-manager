@@ -1,10 +1,10 @@
 import { createColumnHelper } from '@tanstack/react-table'
 import { useState, useEffect } from 'react'
 import Table from '../common/table/Table'
-import { IItem } from '../../../types/item'
+import { Item } from '../../../types/item'
 import ItemActions from './ItemActions'
 
-const columnHelper = createColumnHelper<IItem>()
+const columnHelper = createColumnHelper<Item>()
 const defaultColumns = [
   columnHelper.accessor('id', {
     header: 'Id',
@@ -30,13 +30,13 @@ const defaultColumns = [
 
 export default function ItemsTable() {
   const api = 'http://localhost:3000/api/items'
-  const [items, setItems] = useState<IItem[]>([])
+  const [items, setItems] = useState<Item[]>([])
   const [columns] = useState<typeof defaultColumns>(() => [...defaultColumns])
 
   useEffect(() => {
     fetch(api)
       .then((res) => res.json())
-      .then(({ items }) => setItems(items as IItem[]))
+      .then(({ items }) => setItems(items as Item[]))
   }, [])
 
   return (

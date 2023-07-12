@@ -1,15 +1,15 @@
 import { useEffect, useReducer, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { IOrder } from '../../../types/order'
+import { Order } from '../../../types/order'
 import Select from '../common/forms/Select'
 import MultiSelect from '../common/forms/MultiSelect'
 import OrderItems from './OrderItems'
 import moment from 'moment'
 import PriceInput from '../common/forms/PriceInput'
-import { IOrderItem } from '../../../types/item'
+import { OrderItem } from '../../../types/item'
 import toast from 'react-hot-toast'
 
-const newOrder: IOrder = {
+const newOrder: Order = {
   name: '',
   checkInDate: new Date(),
   dueDate: new Date(),
@@ -25,7 +25,7 @@ const newOrder: IOrder = {
   items: [],
 }
 
-function reducer(state: IOrder, action: any): IOrder {
+function reducer(state: Order, action: any): Order {
   switch (action.type) {
     case 'set':
       return { ...action.payload }
@@ -63,7 +63,7 @@ function reducer(state: IOrder, action: any): IOrder {
         categories: [...action.payload],
       }
     case 'addItem': {
-      const newItem: IOrderItem = {
+      const newItem: OrderItem = {
         code: '',
         signedPricePerBatch: 0,
         requestedBatchQuantity: 0,

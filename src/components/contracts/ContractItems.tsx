@@ -1,10 +1,10 @@
 import { Dispatch } from 'react'
 import PriceInput from '../common/forms/PriceInput'
-import { IContractItem } from '../../../types/item'
+import { ContractItem } from '../../../types/item'
 import Select from '../common/forms/Select'
 
 type ItemsProps = {
-  items: IContractItem[]
+  items: ContractItem[]
   dispatch: Dispatch<any>
 }
 export default function ContractItems({ items, dispatch }: ItemsProps) {

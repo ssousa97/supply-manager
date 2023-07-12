@@ -35,8 +35,8 @@ export const OutflowSchema = z.object({
   currentQuantity: z.coerce.number(),
 })
 
-export type IContractItem = z.infer<typeof ContractItemSchema>
-export type IOrderItem = z.infer<typeof OrderItemSchema>
-export type IItem = z.infer<typeof ItemSchema>
-export type IInflow = z.infer<typeof InflowSchema>
-export type IOutflow = z.infer<typeof OutflowSchema>
+export type ContractItem = z.infer<typeof ContractItemSchema>
+export type OrderItem = z.infer<typeof OrderItemSchema>
+export type Item = z.infer<typeof ItemSchema>
+export type Inflow = z.infer<typeof InflowSchema>
+export type Outflow = z.infer<typeof OutflowSchema>

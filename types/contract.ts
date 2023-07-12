@@ -13,4 +13,4 @@ export const ContractSchema = z.object({
   items: z.array(ContractItemSchema).min(1, { message: 'Você deve incluir ao menos 1 item.' }),
 })
 
-export type IContract = z.infer<typeof ContractSchema>
+export type Contract = z.infer<typeof ContractSchema>

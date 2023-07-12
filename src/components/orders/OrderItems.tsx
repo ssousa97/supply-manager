@@ -1,10 +1,10 @@
 import { Dispatch } from 'react'
 import PriceInput from '../common/forms/PriceInput'
-import { IOrderItem } from '../../../types/item'
+import { OrderItem } from '../../../types/item'
 import Select from '../common/forms/Select'
 
 type ItemsProps = {
-  items: IOrderItem[]
+  items: OrderItem[]
   dispatch: Dispatch<any>
 }
 export default function OrderItems({ items, dispatch }: ItemsProps) {
